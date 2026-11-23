@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Survey for Foreign Workers in Taiwan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- 字型非同步載入：網路慢時不會卡住問卷 -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<style>
+  :root {
+    --bg: #F6F8F7; --card: #FFFFFF; --line: #DCE3E0; --ink: #14202B; --body: #2C3A46;
+    --muted: #4A5865; --accent: #0F6B5C; --accent-dark: #0A4F44; --tint: #E3EFEC;
+    --warn-bg: #FFF4E5; --warn-ink: #7A4100; --err: #B42318;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Noto Sans', 'Noto Sans TC', 'Noto Sans Thai', system-ui, sans-serif; }
+  main { max-width: 560px; margin: 0 auto; padding: 32px 20px 48px; display: flex; flex-direction: column; gap: 20px; }
+  h1 { margin: 0; font-size: 26px; line-height: 1.3; }
+  h2 { margin: 0; font-size: 17px; }
+  p { margin: 0; line-height: 1.65; color: var(--body); font-size: 15px; }
+  .eyebrow { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .muted { color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .card.missing { border-color: #D97706; box-shadow: 0 0 0 2px #FDE7C7; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { background: var(--tint); color: var(--accent-dark); font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; }
+  .lang-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 60px; padding: 12px 18px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
+  .lang-btn:hover, .lang-btn:focus-visible { border-color: var(--accent); }
+  .lang-name { font-size: 17px; font-weight: 600; display: block; }
+  .lang-sub { font-size: 12px; color: var(--muted); display: block; margin-top: 2px; }
+  .btn { min-height: 54px; border-radius: 14px; font: inherit; font-size: 17px; font-weight: 700; cursor: pointer; padding: 0 20px; border: 1.5px solid var(--accent); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:disabled { background: #9DB8B2; border-color: #9DB8B2; cursor: not-allowed; }
+  .btn-ghost { background: #fff; color: var(--accent); }
+  .btn-row { display: flex; gap: 12px; }
+  .btn-row .btn { flex: 1; }
+  .link-btn { background: none; border: none; color: var(--accent); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 44px; padding: 0; text-align: left; }
+  fieldset { border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  legend { font-size: 16px; font-weight: 600; line-height: 1.5; margin-bottom: 8px; padding: 0; }
+  .opt { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; font-size: 15px; line-height: 1.4; }
+  .opt:has(input:checked) { border-color: var(--accent); background: var(--tint); }
+  .opt input { width: 20px; height: 20px; margin: 0; accent-color: var(--accent); flex-shrink: 0; }
+  .check { display: flex; align-items: flex-start; gap: 12px; min-height: 44px; font-size: 15px; line-height: 1.5; cursor: pointer; }
+  .check input { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--accent); flex-shrink: 0; }
+  label.q { font-size: 16px; font-weight: 600; line-height: 1.5; }
+  input[type=number], textarea { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+  textarea { min-height: 110px; resize: vertical; }
+  .err { color: var(--err); font-size: 14px; }
+  .banner { background: var(--warn-bg); color: var(--warn-ink); border-radius: 12px; padding: 14px 16px; font-size: 14px; line-height: 1.55; }
+  .progress { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
+  .progress > div { height: 100%; background: var(--accent); }
+  .vignette { white-space: pre-line; background: #EEF3F1; border-radius: 12px; padding: 16px; font-size: 15px; line-height: 1.7; color: var(--body); }
+  .hotline { display: flex; align-items: center; gap: 14px; }
+  .hotline b { min-width: 64px; font-size: 22px; color: var(--accent); }
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  pre { white-space: pre-wrap; word-break: break-all; font-size: 12px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+</style>
+</head>
+<body>
+<main id="app" aria-live="polite"></main>
+
+<script>
+/* =====================================================================
+   1. 問卷設定（之後只要改這一區）
+   ===================================================================== */
+const CONFIG = {
+  // 部署 Google Apps Script 後，把網址貼在這裡。留空 = 示範模式（不會送出，只顯示資料）
+  scriptUrl: "https://script.google.com/macros/s/AKfycbzf2E7Zlvf6HU-4jVyyj5reyw_6NWmnrqNTF4rw8QI0-bu3bADcm3CyxHqeqxJQ4zqaXQ/exec",
+  surveyId: "mw-survey",
+  version: "v0.1-prototype",
+  missingCode: -99,      // 有看到但沒回答
+  notShownCode: -98,     // 因跳題沒有顯示
+
+  // 語言：新增語言時，在這裡加一行，並在下面每段文字補上該語言
+  languages: [
+    { code: "zh", name: "繁體中文", sub: "Traditional Chinese" },
+    { code: "en", name: "English", sub: "For Filipino and other workers" }
+  ],
+
+  ui: {
+    university: { zh: "國立臺北大學", en: "National Taipei University" },
+    chooseLang: { zh: "請選擇語言", en: "Choose your language" },
+    anonymous: { zh: "匿名填答", en: "Anonymous" },
+    minutes: { zh: "約 [XX] 分鐘", en: "About [XX] min" },
+    noId: { zh: "不會收集姓名、證件號碼或電話。", en: "No name, ID or phone number is collected." },
+    changeLang: { zh: "更換語言", en: "Change language" },
+    consentTitle: { zh: "在填寫之前，請先了解這份問卷", en: "Before you start, please read this" },
+    ageCheck: { zh: "我已年滿 18 歲，目前在台灣工作。", en: "I am 18 or older and currently working in Taiwan." },
+    agreeCheck: { zh: "我已閱讀以上說明，同意參加。", en: "I have read the information above and agree to take part." },
+    start: { zh: "開始填寫", en: "Start" },
+    decline: { zh: "我不想參加", en: "I do not want to take part" },
+    declinedTitle: { zh: "謝謝你的時間", en: "Thank you for your time" },
+    declinedBody: { zh: "你沒有參加這份問卷，沒有任何資料被送出。", en: "You did not take the survey. No information was sent." },
+    next: { zh: "下一頁", en: "Next" },
+    back: { zh: "上一頁", en: "Back" },
+    submit: { zh: "送出", en: "Submit" },
+    sending: { zh: "送出中…", en: "Sending…" },
+    missingBanner: { zh: "有題目還沒回答（已用橘色標示）。如果是不想回答，可以直接再按一次「下一頁」。", en: "Some questions are not answered (marked in orange). If you prefer not to answer, tap Next again." },
+    numRange: { zh: "請輸入 {min} 到 {max} 之間的數字", en: "Please enter a number from {min} to {max}" },
+    page: { zh: "第 {n} / {total} 頁", en: "Page {n} of {total}" },
+    sendFailTitle: { zh: "網路好像不穩定", en: "The connection seems unstable" },
+    sendFailBody: { zh: "你的答案還保存在這支手機裡，沒有遺失。請確認有網路後按「再試一次」。", en: "Your answers are still saved on this phone. Please check your internet and tap Try again." },
+    retry: { zh: "再試一次", en: "Try again" },
+    thanksTitle: { zh: "謝謝你的填答", en: "Thank you!" },
+    thanksBody: { zh: "你的回答已經送出。你的分享能幫助我們更了解外籍朋友在台灣的處境。", en: "Your answers have been sent. Thank you for helping us understand the situation of foreign workers in Taiwan." },
+    hotlineTitle: { zh: "需要幫忙時可以打這些電話", en: "Hotlines if you need help" },
+    hotline165: { zh: "反詐騙諮詢專線：有人要借你的帳戶或提款卡、或懷疑被騙時", en: "Anti-fraud hotline: if someone asks to borrow your bank account or ATM card, or you think you were scammed" },
+    hotline1955: { zh: "勞動部勞工諮詢申訴專線：免付費，提供多種語言服務", en: "Ministry of Labor hotline: free, available in several languages" },
+    share: { zh: "複製問卷連結，分享給朋友", en: "Copy the survey link for friends" },
+    copied: { zh: "已複製連結", en: "Link copied" },
+    demoNote: { zh: "示範模式：尚未設定 scriptUrl，資料沒有送出。以下是會送到試算表的內容：", en: "Demo mode: no scriptUrl set, nothing was sent. This is what would be sent:" }
+  },
+
+  // 同意頁的段落
+  consent: [
+    { title: { zh: "這份問卷在做什麼", en: "What is this survey about" },
+      body: { zh: "我們想了解在台灣工作的外籍朋友，平常的經濟狀況和遇到各種情況時的想法。答案沒有對錯，請依照你真實的想法回答。", en: "We want to learn about the financial situation of foreign workers in Taiwan and what they think in different situations. There are no right or wrong answers." } },
+    { title: { zh: "你的資料很安全", en: "Your information is safe" },
+      body: { zh: "不會問你的姓名、居留證號、護照號碼或電話。資料只用於學術研究，不會交給雇主、仲介或任何政府機關，結果只會以整體統計呈現。", en: "We will not ask for your name, ARC number, passport number or phone number. The data is only for academic research and will not be given to employers, agencies or any government office. Results are only reported as group statistics." } },
+    { title: { zh: "你的權利", en: "Your rights" },
+      body: { zh: "參加完全自願。你可以跳過不想回答的題目，也可以隨時關掉網頁停止填寫，不會對你的工作或居留有任何影響。", en: "Taking part is voluntary. You can skip any question and stop at any time by closing the page. This will not affect your job or residence in any way." } },
+    { title: { zh: "有問題可以聯絡", en: "Contact" },
+      body: { zh: "研究者：蔡逸騏 · [EMAIL]\n倫理審查核准編號：[IRB NO.]", en: "Researcher: Yi-Chi Tsai · [EMAIL]\nEthics approval no.: [IRB NO.]" } }
+  ],
+
+  // 量表選項（可重複使用）
+  scales: {
+    agree5: [
+      { value: 1, label: { zh: "非常不同意", en: "Strongly disagree" } },
+      { value: 2, label: { zh: "不同意", en: "Disagree" } },
+      { value: 3, label: { zh: "普通", en: "Neutral" } },
+      { value: 4, label: { zh: "同意", en: "Agree" } },
+      { value: 5, label: { zh: "非常同意", en: "Strongly agree" } }
+    ],
+    likely5: [
+      { value: 1, label: { zh: "非常不可能", en: "Very unlikely" } },
+      { value: 2, label: { zh: "不太可能", en: "Unlikely" } },
+      { value: 3, label: { zh: "不確定", en: "Not sure" } },
+      { value: 4, label: { zh: "有可能", en: "Likely" } },
+      { value: 5, label: { zh: "非常可能", en: "Very likely" } }
+    ]
+  },
+
+  // 題目：每一個 section 是一頁。id 就是試算表的欄位名稱（對照變項代碼表）
+  // type: single（單選）、scale（量表）、number（數字）、text（文字）、info（說明文字，不作答）
+  // optional: true = 沒填也不會跳出提醒
+  // showIf: 跳題條件，例如 { item: "D5", in: [1] } = D5 選 1 才顯示
+  sections: [
+    { id: "demo", title: { zh: "基本資料", en: "About you" }, items: [
+      { id: "D1", type: "single", label: { zh: "你來自哪一個國家？", en: "Which country are you from?" }, options: [
+        { value: 1, label: { zh: "印尼", en: "Indonesia" } },
+        { value: 2, label: { zh: "越南", en: "Vietnam" } },
+        { value: 3, label: { zh: "菲律賓", en: "Philippines" } },
+        { value: 4, label: { zh: "泰國", en: "Thailand" } },
+        { value: 5, label: { zh: "其他", en: "Other" } } ] },
+      { id: "D2", type: "number", min: 18, max: 80, label: { zh: "你今年幾歲？", en: "How old are you?" } },
+      { id: "D3", type: "number", min: 0, max: 40, label: { zh: "你在台灣工作幾年了？（未滿一年請填 0）", en: "How many years have you worked in Taiwan? (Less than 1 year = 0)" } },
+      { id: "D5", type: "single", label: { zh: "你有台灣的銀行帳戶嗎？", en: "Do you have a bank account in Taiwan?" }, options: [
+        { value: 1, label: { zh: "有", en: "Yes" } },
+        { value: 0, label: { zh: "沒有", en: "No" } } ] },
+      { id: "D6", type: "single", showIf: { item: "D5", in: [1] }, label: { zh: "你的存摺和提款卡平常是誰保管？", en: "Who usually keeps your bankbook and ATM card?" }, options: [
+        { value: 1, label: { zh: "我自己", en: "Myself" } },
+        { value: 2, label: { zh: "雇主", en: "My employer" } },
+        { value: 3, label: { zh: "仲介", en: "My agency" } },
+        { value: 4, label: { zh: "其他人", en: "Someone else" } } ] }
+    ]},
+    { id: "scale", title: { zh: "你的想法（量表範例）", en: "Your views (sample scale)" }, items: [
+      { id: "LAVS01", type: "scale", scale: "agree5", label: { zh: "[量表第 1 題：之後換成正式題目]", en: "[Scale item 1: replace with final item]" } },
+      { id: "LAVS02", type: "scale", scale: "agree5", label: { zh: "[量表第 2 題：之後換成正式題目]", en: "[Scale item 2: replace with final item]" } },
+      { id: "ATT1", type: "scale", scale: "agree5", label: { zh: "這一題請選「同意」。", en: "For this question, please choose \"Agree\"." } },
+      { id: "LAVS03", type: "scale", scale: "agree5", label: { zh: "[量表第 3 題：之後換成正式題目]", en: "[Scale item 3: replace with final item]" } }
+    ]},
+    { id: "vignette", title: { zh: "情境題（範例）", en: "Situations (sample)" }, items: [
+      { id: "V1_text", type: "info", label: { zh: "[情境 1：之後放入改寫自判決的情境文字]\n\n例如：你的同鄉朋友說……", en: "[Situation 1: replace with the final scenario text]\n\nFor example: a friend from your hometown says…" } },
+      { id: "V1", type: "scale", scale: "likely5", label: { zh: "如果是你，你有多可能答應？", en: "If this were you, how likely would you be to agree?" } }
+    ]},
+    { id: "end", title: { zh: "最後一題", en: "Last question" }, items: [
+      { id: "OPEN1", type: "text", optional: true, maxLength: 1000, label: { zh: "還有什麼想告訴我們的嗎？（可以不填）", en: "Is there anything else you want to tell us? (optional)" } }
+    ]}
+  ]
+};
+
+/* =====================================================================
+   2. 問卷程式（一般不需要修改）
+   ===================================================================== */
+const KEY_DRAFT = "draft_" + CONFIG.surveyId;
+const KEY_DONE = "done_" + CONFIG.surveyId;
+const KEY_PENDING = "pending_" + CONFIG.surveyId;
+const app = document.getElementById("app");
+
+const store = {
+  get(k) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+
+let S = { page: "lang", lang: null, answers: {}, consent: { age: false, agree: false }, hp: "",
+          start: null, respId: null, sec: 0, warned: {}, showMissing: false, lastPayload: null };
+
+const allItems = CONFIG.sections.flatMap(s => s.items);
+const dependedOn = new Set(allItems.filter(i => i.showIf).map(i => i.showIf.item));
+
+function t(obj) {
+  if (obj == null) return "";
+  if (typeof obj === "string") return obj;
+  return obj[S.lang] ?? obj.en ?? obj.zh ?? Object.values(obj)[0];
+}
+function ui(key, vars) {
+  let s = t(CONFIG.ui[key]);
+  if (vars) for (const k in vars) s = s.replace("{" + k + "}", vars[k]);
+  return s;
+}
+function el(tag, attrs, ...kids) {
+  const n = document.createElement(tag);
+  for (const k in (attrs || {})) {
+    const v = attrs[k];
+    if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else if (k === "text") n.textContent = v;
+    else if (v === true) n.setAttribute(k, "");
+    else if (v !== false && v != null) n.setAttribute(k, v);
+  }
+  for (const c of kids.flat(Infinity)) if (c != null && c !== false) n.append(c);
+  return n;
+}
+function add(...kids) {
+  for (const c of kids.flat(Infinity)) if (c != null && c !== false) app.append(c);
+}
+function uuid() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return "r" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+}
+function saveDraft() {
+  const { lastPayload, ...d } = S;
+  store.set(KEY_DRAFT, d);
+}
+function go(page) { S.page = page; saveDraft(); render(); window.scrollTo(0, 0); }
+
+function visible(item) {
+  if (!item.showIf) return true;
+  return item.showIf.in.includes(S.answers[item.showIf.item]);
+}
+function answered(item) {
+  const v = S.answers[item.id];
+  return v !== undefined && v !== null && v !== "";
+}
+function numError(item) {
+  const v = S.answers[item.id];
+  if (item.type !== "number" || v === undefined || v === "") return false;
+  return !(Number.isFinite(v) && v >= item.min && v <= item.max);
+}
+
+/* ---------- 畫面 ---------- */
+function render() {
+  app.replaceChildren();
+  document.documentElement.lang = S.lang === "zh" ? "zh-Hant" : (S.lang || "zh-Hant");
+  ({ lang: renderLang, consent: renderConsent, declined: renderDeclined, section: renderSection,
+     sending: renderSending, failed: renderFailed, thanks: renderThanks })[S.page]();
+}
+
+function renderLang() {
+  add(
+    el("div", { class: "eyebrow", text: "國立臺北大學 · National Taipei University" }),
+    el("h1", { text: "Survey for Foreign Workers in Taiwan" }),
+    el("p", { text: "在台外籍工作者問卷" }),
+    el("div", { class: "muted", text: "Choose your language · 請選擇語言" }),
+    CONFIG.languages.map(l => el("button", { class: "lang-btn", type: "button",
+      onclick: () => { S.lang = l.code; go("consent"); } },
+      el("span", {}, el("span", { class: "lang-name", text: l.name }), el("span", { class: "lang-sub", text: l.sub })),
+      el("span", { "aria-hidden": "true", text: "›" }))),
+    el("div", { class: "muted", text: "No name, ID or phone number is collected. 不會收集姓名、證件號碼或電話。" })
+  );
+}
+
+function renderConsent() {
+  const startBtn = el("button", { class: "btn btn-primary", type: "button", disabled: !(S.consent.age && S.consent.agree),
+    onclick: () => {
+      if (!S.start) S.start = new Date().toISOString();
+      if (!S.respId) S.respId = uuid();
+      S.sec = 0; go("section");
+    } }, ui("start"));
+  const box = (key, label) => el("label", { class: "check" },
+    el("input", { type: "checkbox", checked: S.consent[key], onchange: e => {
+      S.consent[key] = e.target.checked; startBtn.disabled = !(S.consent.age && S.consent.agree); saveDraft(); } }),
+    el("span", { text: label }));
+  add(
+    el("button", { class: "link-btn", type: "button", onclick: () => go("lang") }, "‹ " + ui("changeLang")),
+    el("div", { class: "eyebrow", text: ui("university") }),
+    el("h1", { text: ui("consentTitle") }),
+    el("div", { class: "chips" }, el("span", { class: "chip", text: ui("minutes") }), el("span", { class: "chip", text: ui("anonymous") })),
+    CONFIG.consent.map(c => el("div", { class: "card" }, el("h2", { text: t(c.title) }),
+      el("p", { style: "white-space: pre-line", text: t(c.body) }))),
+    // 防機器人欄位：真人看不到
+    el("div", { class: "hp", "aria-hidden": "true" },
+      el("label", {}, "Website", el("input", { type: "text", tabindex: "-1", autocomplete: "off", oninput: e => { S.hp = e.target.value; } }))),
+    box("age", ui("ageCheck")),
+    box("agree", ui("agreeCheck")),
+    startBtn,
+    el("button", { class: "link-btn", type: "button", style: "align-self: center", onclick: () => { store.del(KEY_DRAFT); go("declined"); } }, ui("decline"))
+  );
+}
+
+function renderDeclined() {
+  add(el("h1", { text: ui("declinedTitle") }), el("p", { text: ui("declinedBody") }));
+}
+
+function renderItem(item) {
+  const missing = S.showMissing && visible(item) && item.type !== "info" && !item.optional && !answered(item);
+  const card = el("div", { class: "card" + (missing ? " missing" : ""), id: "q-" + item.id });
+  const set = v => {
+    S.answers[item.id] = v; saveDraft();
+    if (dependedOn.has(item.id) || S.showMissing) { const y = window.scrollY; render(); window.scrollTo(0, y); }
+  };
+  if (item.type === "info") {
+    card.append(el("div", { class: "vignette", text: t(item.label) }));
+  } else if (item.type === "single" || item.type === "scale") {
+    const opts = item.type === "scale" ? CONFIG.scales[item.scale] : item.options;
+    card.append(el("fieldset", {}, el("legend", { text: t(item.label) }),
+      opts.map(o => el("label", { class: "opt" },
+        el("input", { type: "radio", name: item.id, value: String(o.value), checked: S.answers[item.id] === o.value,
+          onchange: () => set(o.value) }),
+        el("span", { text: t(o.label) })))));
+  } else if (item.type === "number") {
+    const err = el("div", { class: "err", text: numError(item) ? ui("numRange", { min: item.min, max: item.max }) : "" });
+    card.append(el("label", { class: "q", for: "in-" + item.id, text: t(item.label) }),
+      el("input", { id: "in-" + item.id, type: "number", inputmode: "numeric", min: item.min, max: item.max,
+        value: S.answers[item.id] ?? "",
+        oninput: e => {
+          const raw = e.target.value;
+          S.answers[item.id] = raw === "" ? "" : Number(raw); saveDraft();
+          err.textContent = numError(item) ? ui("numRange", { min: item.min, max: item.max }) : "";
+        } }), err);
+  } else if (item.type === "text") {
+    const ta = el("textarea", { id: "in-" + item.id, maxlength: item.maxLength || 1000,
+      oninput: e => { S.answers[item.id] = e.target.value; saveDraft(); } });
+    ta.value = S.answers[item.id] ?? "";
+    card.append(el("label", { class: "q", for: "in-" + item.id, text: t(item.label) }), ta);
+  }
+  return card;
+}
+
+function renderSection() {
+  const sec = CONFIG.sections[S.sec];
+  const total = CONFIG.sections.length;
+  const last = S.sec === total - 1;
+  const items = sec.items.filter(visible);
+  add(
+    el("div", { class: "muted", text: ui("page", { n: S.sec + 1, total }) }),
+    el("div", { class: "progress", role: "progressbar", "aria-valuemin": "0", "aria-valuemax": String(total), "aria-valuenow": String(S.sec + 1) },
+      el("div", { style: "width:" + ((S.sec + 1) / total * 100) + "%" })),
+    el("h1", { text: t(sec.title) }),
+    S.showMissing ? el("div", { class: "banner", role: "alert", text: ui("missingBanner") }) : null,
+    items.map(renderItem),
+    el("div", { class: "btn-row" },
+      el("button", { class: "btn btn-ghost", type: "button",
+        onclick: () => { S.showMissing = false; if (S.sec === 0) go("consent"); else { S.sec--; go("section"); } } }, ui("back")),
+      el("button", { class: "btn btn-primary", type: "button", onclick: () => next(items, last) }, last ? ui("submit") : ui("next")))
+  );
+}
+
+function next(items, last) {
+  const bad = items.find(numError);
+  if (bad) { document.getElementById("q-" + bad.id).scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+  const missing = items.filter(i => i.type !== "info" && !i.optional && !answered(i));
+  if (missing.length && !S.warned[S.sec]) {
+    S.warned[S.sec] = true; S.showMissing = true; saveDraft(); render();
+    document.getElementById("q-" + missing[0].id).scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  S.showMissing = false;
+  if (last) submit(); else { S.sec++; go("section"); }
+}
+
+/* ---------- 送出 ---------- */
+function buildPayload() {
+  const end = new Date();
+  const p = {
+    survey_id: CONFIG.surveyId, version: CONFIG.version, resp_id: S.respId, lang: S.lang,
+    consent: 1, start_time: S.start, end_time: end.toISOString(),
+    duration_sec: Math.round((end - new Date(S.start)) / 1000),
+    device: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "mobile" : "desktop",
+    prior_submit_on_device: store.get(KEY_DONE) ? 1 : 0,
+    hp: S.hp
+  };
+  for (const item of allItems) {
+    if (item.type === "info") continue;
+    if (!visible(item)) p[item.id] = CONFIG.notShownCode;
+    else if (!answered(item)) p[item.id] = CONFIG.missingCode;
+    else p[item.id] = S.answers[item.id];
+  }
+  return p;
+}
+
+async function send(payload) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      // text/plain 是「簡單請求」，不會觸發 CORS 預檢，Apps Script 才收得到
+      const res = await fetch(CONFIG.scriptUrl, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (data.ok) return true;
+    } catch (e) {}
+    await new Promise(r => setTimeout(r, 1500 * (attempt + 1)));
+  }
+  return false;
+}
+
+async function submit() {
+  const payload = buildPayload();
+  S.lastPayload = payload;
+  if (!CONFIG.scriptUrl) { finish(); return; }
+  store.set(KEY_PENDING, payload);
+  go("sending");
+  const ok = await send(payload);
+  if (ok) finish(); else go("failed");
+}
+function finish() {
+  store.del(KEY_PENDING); store.del(KEY_DRAFT); store.set(KEY_DONE, 1);
+  S.page = "thanks"; render(); window.scrollTo(0, 0);
+}
+async function retry() {
+  const payload = store.get(KEY_PENDING) || S.lastPayload;
+  go("sending");
+  const ok = await send(payload);
+  if (ok) finish(); else go("failed");
+}
+
+function renderSending() { add(el("h1", { text: ui("sending") })); }
+function renderFailed() {
+  add(el("h1", { text: ui("sendFailTitle") }), el("p", { text: ui("sendFailBody") }),
+    el("button", { class: "btn btn-primary", type: "button", onclick: retry }, ui("retry")));
+}
+function renderThanks() {
+  const status = el("div", { class: "muted", role: "status" });
+  add(
+    el("h1", { text: ui("thanksTitle") }), el("p", { text: ui("thanksBody") }),
+    el("div", { class: "card" }, el("h2", { text: ui("hotlineTitle") }),
+      el("div", { class: "hotline" }, el("b", { text: "165" }), el("p", { text: ui("hotline165") })),
+      el("div", { class: "hotline" }, el("b", { text: "1955" }), el("p", { text: ui("hotline1955") }))),
+    el("button", { class: "btn btn-ghost", type: "button", onclick: async () => {
+      try { await navigator.clipboard.writeText(location.href.split("#")[0]); status.textContent = ui("copied"); } catch (e) {}
+    } }, ui("share")),
+    status
+  );
+  if (!CONFIG.scriptUrl && S.lastPayload) {
+    add(el("p", { class: "muted", text: ui("demoNote") }), el("pre", { text: JSON.stringify(S.lastPayload, null, 2) }));
+  }
+}
+
+/* ---------- 啟動：接續上次進度或補送 ---------- */
+(async function init() {
+  const pending = store.get(KEY_PENDING);
+  const draft = store.get(KEY_DRAFT);
+  if (draft && CONFIG.languages.some(l => l.code === draft.lang)) S = { ...S, ...draft, showMissing: false };
+  if (S.page === "sending" || S.page === "failed" || S.page === "thanks") S.page = "lang";
+  if (pending && CONFIG.scriptUrl) {
+    S.lang = pending.lang; S.lastPayload = pending;
+    await retry();
+    return;
+  }
+  render();
+})();
+</script>
+</body>
+</html>
