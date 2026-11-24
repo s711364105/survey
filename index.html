@@ -729,7 +729,7 @@ function renderThanks() {
       el("button", { class: "btn btn-primary", type: "button", onclick: async () => {
         const url = location.href.split("#")[0];
         try {
-          if (navigator.share) { await navigator.share({ text: ui("shareAsk").split(" / ")[0], url }); return; }
+          if (navigator.share) { await navigator.share({ url }); return; }  // 只分享網址，不附文字
         } catch (e) { if (e && e.name === "AbortError") return; }
         try { await navigator.clipboard.writeText(url); status.textContent = ui("copied"); } catch (e) {}
       } }, bi(ui("share"))),
