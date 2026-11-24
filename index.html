@@ -123,13 +123,15 @@ const CONFIG = {
   // 部署 Google Apps Script 後，把網址貼在這裡。留空 = 示範模式（不會送出，只顯示資料）
   scriptUrl: "https://script.google.com/macros/s/AKfycbzf2E7Zlvf6HU-4jVyyj5reyw_6NWmnrqNTF4rw8QI0-bu3bADcm3CyxHqeqxJQ4zqaXQ/exec",
   surveyId: "mw-survey",
-  version: "v0.19-prototype",
+  version: "v0.20-prototype",
   scaleLayout: "slider-h", // 所有量表題的預設呈現方式：橫向拉桿
   // 金額題的貨幣：先依「語言」假設國籍（英文版假設為菲律賓）。試算表會另存「題號_cur」記錄用了哪種貨幣
   currency: {
     id: { code: "IDR", unit: "Rupiah (Rp)", locale: "id-ID" },
     vi: { code: "VND", unit: "đồng (VND)", locale: "vi-VN" },
     en: { code: "PHP", unit: "Philippine peso (₱)", locale: "en-US" },
+    eng: { code: "PHP", unit: "Philippine peso (₱)", locale: "en-US" },
+    tl: { code: "PHP", unit: "Piso (₱)", locale: "en-US" },
     th: { code: "THB", unit: "บาท (THB)", locale: "th-TH" },
     zh: { code: "HOME", unit: "（母國貨幣）", locale: "zh-TW" }
   },
@@ -140,7 +142,9 @@ const CONFIG = {
   languages: [
     { code: "id", name: "Bahasa Indonesia" },
     { code: "vi", name: "Tiếng Việt" },
-    { code: "en", name: "English / Tagalog" },
+    { code: "en", name: "English / Tagalog" },   // 英文＋他加祿語並列
+    { code: "eng", name: "English" },            // 只有英文（由雙語文字自動取英文部分）
+    { code: "tl", name: "Tagalog" },             // 只有他加祿語（由雙語文字自動取他加祿語部分；介面與開頭語另有 tl 翻譯）
     { code: "th", name: "ภาษาไทย" },
     { code: "zh", name: "繁體中文" }
   ],
@@ -150,7 +154,8 @@ const CONFIG = {
     choose: {
       id: "Pilih bahasa",
       vi: "Chọn ngôn ngữ",
-      en: "Choose your language / Pumili ng wika",
+      eng: "Choose your language",
+      tl: "Pumili ng wika",
       th: "เลือกภาษา",
       zh: "請選擇語言"
     }
@@ -158,66 +163,69 @@ const CONFIG = {
 
   // ※ 介面文字與同意頁的 id / vi / th 版本由 Claude 草擬，尚待母語者確認
   ui: {
-    university: { zh: "國立臺北大學", en: "National Taipei University", id: "National Taipei University", vi: "Đại học Quốc gia Đài Bắc", th: "มหาวิทยาลัยแห่งชาติไทเป" },
-    anonymous: { zh: "匿名填答", en: "Anonymous", id: "Anonim", vi: "Ẩn danh", th: "ไม่ระบุตัวตน" },
-    minutes: { zh: "不到 10 分鐘", en: "Less than 10 min", id: "Kurang dari 10 menit", vi: "Dưới 10 phút", th: "ไม่ถึง 10 นาที" },
-    changeLang: { zh: "更換語言", en: "Change language", id: "Ganti bahasa", vi: "Đổi ngôn ngữ", th: "เปลี่ยนภาษา" },
+    university: { zh: "國立臺北大學", en: "National Taipei University", id: "National Taipei University", vi: "Đại học Quốc gia Đài Bắc", th: "มหาวิทยาลัยแห่งชาติไทเป", tl: "National Taipei University" },
+    anonymous: { zh: "匿名填答", en: "Anonymous", id: "Anonim", vi: "Ẩn danh", th: "ไม่ระบุตัวตน", tl: "Anonymous" },
+    minutes: { zh: "不到 10 分鐘", en: "Less than 10 min", id: "Kurang dari 10 menit", vi: "Dưới 10 phút", th: "ไม่ถึง 10 นาที", tl: "Wala pang 10 minuto" },
+    changeLang: { zh: "更換語言", en: "Change language", id: "Ganti bahasa", vi: "Đổi ngôn ngữ", th: "เปลี่ยนภาษา", tl: "Palitan ang wika" },
     consentTitle: { zh: "在填寫之前，請先了解這份問卷", en: "Before you start, please read this", id: "Sebelum mulai, mohon baca informasi ini", vi: "Trước khi bắt đầu, vui lòng đọc thông tin sau", th: "ก่อนเริ่ม กรุณาอ่านข้อมูลนี้" },
-    ageCheck: { zh: "我已年滿 18 歲，目前在台灣工作。", en: "I am 18 or older and currently working in Taiwan.", id: "Saya berusia 18 tahun ke atas dan saat ini bekerja di Taiwan.", vi: "Tôi từ 18 tuổi trở lên và hiện đang làm việc tại Đài Loan.", th: "ฉันอายุ 18 ปีขึ้นไป และปัจจุบันทำงานอยู่ในไต้หวัน" },
-    agreeCheck: { zh: "我已閱讀以上說明，同意參加。", en: "I have read the information above and agree to take part.", id: "Saya sudah membaca informasi di atas dan setuju untuk ikut serta.", vi: "Tôi đã đọc thông tin trên và đồng ý tham gia.", th: "ฉันได้อ่านข้อมูลข้างต้นแล้ว และยินยอมเข้าร่วม" },
-    start: { zh: "開始填寫", en: "Start", id: "Mulai", vi: "Bắt đầu", th: "เริ่ม" },
-    decline: { zh: "我不想參加", en: "I do not want to take part", id: "Saya tidak ingin ikut serta", vi: "Tôi không muốn tham gia", th: "ฉันไม่ต้องการเข้าร่วม" },
-    declinedTitle: { zh: "謝謝你的時間", en: "Thank you for your time", id: "Terima kasih atas waktu Anda", vi: "Cảm ơn bạn đã dành thời gian", th: "ขอบคุณที่สละเวลา" },
-    declinedBody: { zh: "你沒有參加這份問卷，沒有任何資料被送出。", en: "You did not take the survey. No information was sent.", id: "Anda tidak mengisi survei ini. Tidak ada informasi yang dikirim.", vi: "Bạn không tham gia khảo sát. Không có thông tin nào được gửi đi.", th: "คุณไม่ได้ทำแบบสอบถามนี้ และไม่มีข้อมูลใดถูกส่งไป" },
-    backToStart: { zh: "回到首頁", en: "Back to start", id: "Kembali ke awal", vi: "Về trang đầu", th: "กลับไปหน้าแรก" },
-    next: { zh: "下一頁", en: "Next", id: "Berikutnya", vi: "Tiếp theo", th: "ถัดไป" },
-    back: { zh: "上一頁", en: "Back", id: "Kembali", vi: "Quay lại", th: "ย้อนกลับ" },
-    submit: { zh: "送出", en: "Submit", id: "Kirim", vi: "Gửi", th: "ส่ง" },
-    sending: { zh: "送出中…", en: "Sending…", id: "Mengirim…", vi: "Đang gửi…", th: "กำลังส่ง…" },
-    missingBanner: { zh: "有題目還沒回答（已用橘色標示）。如果是不想回答，可以直接再按一次。", en: "Some questions are not answered (marked in orange). If you prefer not to answer, just tap the button again.", id: "Ada pertanyaan yang belum dijawab (ditandai oranye). Jika Anda tidak ingin menjawab, tekan tombolnya sekali lagi.", vi: "Có câu hỏi chưa được trả lời (đánh dấu màu cam). Nếu bạn không muốn trả lời, hãy nhấn nút thêm một lần nữa.", th: "มีคำถามที่ยังไม่ได้ตอบ (มีกรอบสีส้ม) หากคุณไม่ต้องการตอบ กดปุ่มอีกครั้งได้เลย" },
-    numRange: { zh: "請輸入 {min} 到 {max} 之間的數字", en: "Please enter a number from {min} to {max}", id: "Masukkan angka dari {min} sampai {max}", vi: "Vui lòng nhập số từ {min} đến {max}", th: "กรุณากรอกตัวเลขตั้งแต่ {min} ถึง {max}" },
-    page: { zh: "第 {n} / {total} 頁", en: "Page {n} of {total}", id: "Halaman {n} dari {total}", vi: "Trang {n}/{total}", th: "หน้า {n} จาก {total}" },
+    ageCheck: { zh: "我已年滿 18 歲，目前在台灣工作。", en: "I am 18 or older and currently working in Taiwan.", id: "Saya berusia 18 tahun ke atas dan saat ini bekerja di Taiwan.", vi: "Tôi từ 18 tuổi trở lên và hiện đang làm việc tại Đài Loan.", th: "ฉันอายุ 18 ปีขึ้นไป และปัจจุบันทำงานอยู่ในไต้หวัน", tl: "Ako ay 18 taong gulang pataas at kasalukuyang nagtatrabaho sa Taiwan." },
+    agreeCheck: { zh: "我已閱讀以上說明，同意參加。", en: "I have read the information above and agree to take part.", id: "Saya sudah membaca informasi di atas dan setuju untuk ikut serta.", vi: "Tôi đã đọc thông tin trên và đồng ý tham gia.", th: "ฉันได้อ่านข้อมูลข้างต้นแล้ว และยินยอมเข้าร่วม", tl: "Nabasa ko ang impormasyon sa itaas at pumapayag akong sumali." },
+    start: { zh: "開始填寫", en: "Start", id: "Mulai", vi: "Bắt đầu", th: "เริ่ม", tl: "Simulan" },
+    decline: { zh: "我不想參加", en: "I do not want to take part", id: "Saya tidak ingin ikut serta", vi: "Tôi không muốn tham gia", th: "ฉันไม่ต้องการเข้าร่วม", tl: "Ayokong sumali" },
+    declinedTitle: { zh: "謝謝你的時間", en: "Thank you for your time", id: "Terima kasih atas waktu Anda", vi: "Cảm ơn bạn đã dành thời gian", th: "ขอบคุณที่สละเวลา", tl: "Salamat sa iyong oras" },
+    declinedBody: { zh: "你沒有參加這份問卷，沒有任何資料被送出。", en: "You did not take the survey. No information was sent.", id: "Anda tidak mengisi survei ini. Tidak ada informasi yang dikirim.", vi: "Bạn không tham gia khảo sát. Không có thông tin nào được gửi đi.", th: "คุณไม่ได้ทำแบบสอบถามนี้ และไม่มีข้อมูลใดถูกส่งไป", tl: "Hindi ka sumali sa survey. Walang impormasyong naipadala." },
+    backToStart: { zh: "回到首頁", en: "Back to start", id: "Kembali ke awal", vi: "Về trang đầu", th: "กลับไปหน้าแรก", tl: "Bumalik sa simula" },
+    next: { zh: "下一頁", en: "Next", id: "Berikutnya", vi: "Tiếp theo", th: "ถัดไป", tl: "Susunod" },
+    back: { zh: "上一頁", en: "Back", id: "Kembali", vi: "Quay lại", th: "ย้อนกลับ", tl: "Bumalik" },
+    submit: { zh: "送出", en: "Submit", id: "Kirim", vi: "Gửi", th: "ส่ง", tl: "Ipasa" },
+    sending: { zh: "送出中…", en: "Sending…", id: "Mengirim…", vi: "Đang gửi…", th: "กำลังส่ง…", tl: "Ipinapadala…" },
+    missingBanner: { zh: "有題目還沒回答（已用橘色標示）。如果是不想回答，可以直接再按一次。", en: "Some questions are not answered (marked in orange). If you prefer not to answer, just tap the button again.", id: "Ada pertanyaan yang belum dijawab (ditandai oranye). Jika Anda tidak ingin menjawab, tekan tombolnya sekali lagi.", vi: "Có câu hỏi chưa được trả lời (đánh dấu màu cam). Nếu bạn không muốn trả lời, hãy nhấn nút thêm một lần nữa.", th: "มีคำถามที่ยังไม่ได้ตอบ (มีกรอบสีส้ม) หากคุณไม่ต้องการตอบ กดปุ่มอีกครั้งได้เลย", tl: "May mga tanong na hindi pa nasasagot (may kulay kahel). Kung ayaw mong sagutin, pindutin lang ulit ang button." },
+    numRange: { zh: "請輸入 {min} 到 {max} 之間的數字", en: "Please enter a number from {min} to {max}", id: "Masukkan angka dari {min} sampai {max}", vi: "Vui lòng nhập số từ {min} đến {max}", th: "กรุณากรอกตัวเลขตั้งแต่ {min} ถึง {max}", tl: "Maglagay ng numero mula {min} hanggang {max}" },
+    page: { zh: "第 {n} / {total} 頁", en: "Page {n} of {total}", id: "Halaman {n} dari {total}", vi: "Trang {n}/{total}", th: "หน้า {n} จาก {total}", tl: "Pahina {n} ng {total}" },
     choose: { zh: "請選擇", en: "Please choose / Pumili", id: "Silakan pilih", vi: "Vui lòng chọn", th: "กรุณาเลือก" },
-    otherPlaceholder: { zh: "請說明", en: "Please specify", id: "Sebutkan", vi: "Vui lòng ghi rõ", th: "โปรดระบุ" },
-    sendFailTitle: { zh: "網路好像不穩定", en: "The connection seems unstable", id: "Koneksi internet tidak stabil", vi: "Kết nối mạng không ổn định", th: "การเชื่อมต่ออินเทอร์เน็ตไม่เสถียร" },
-    sendFailBody: { zh: "你的答案還保存在這支手機裡，沒有遺失。請確認有網路後按「再試一次」。", en: "Your answers are still saved on this phone. Please check your internet and tap Try again.", id: "Jawaban Anda masih tersimpan di ponsel ini. Periksa koneksi internet lalu tekan Coba lagi.", vi: "Câu trả lời của bạn vẫn được lưu trên điện thoại này. Vui lòng kiểm tra mạng rồi nhấn Thử lại.", th: "คำตอบของคุณยังบันทึกอยู่ในโทรศัพท์เครื่องนี้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วกด ลองอีกครั้ง" },
-    retry: { zh: "再試一次", en: "Try again", id: "Coba lagi", vi: "Thử lại", th: "ลองอีกครั้ง" },
-    thanksTitle: { zh: "謝謝你的填答", en: "Thank you!", id: "Terima kasih!", vi: "Cảm ơn bạn!", th: "ขอบคุณ!" },
-    thanksBody: { zh: "你的回答已經送出。你的分享能幫助我們更了解外籍朋友在台灣的處境。", en: "Your answers have been sent. Thank you for helping us understand the situation of foreign workers in Taiwan.", id: "Jawaban Anda sudah terkirim. Terima kasih telah membantu kami memahami situasi pekerja asing di Taiwan.", vi: "Câu trả lời của bạn đã được gửi. Cảm ơn bạn đã giúp chúng tôi hiểu hơn về hoàn cảnh của lao động nước ngoài tại Đài Loan.", th: "ส่งคำตอบของคุณแล้ว ขอบคุณที่ช่วยให้เราเข้าใจสถานการณ์ของแรงงานต่างชาติในไต้หวัน" },
-    hotlineTitle: { zh: "需要幫忙時可以打這些電話", en: "Hotlines if you need help", id: "Nomor bantuan jika Anda membutuhkan", vi: "Đường dây hỗ trợ khi bạn cần", th: "สายด่วนเมื่อคุณต้องการความช่วยเหลือ" },
-    hotline165: { zh: "反詐騙諮詢專線：有人要借你的帳戶或提款卡、或懷疑被騙時", en: "Anti-fraud hotline: if someone asks to borrow your bank account or ATM card, or you think you were scammed", id: "Layanan anti-penipuan: jika ada yang ingin meminjam rekening bank atau kartu ATM Anda, atau Anda merasa ditipu", vi: "Đường dây chống lừa đảo: khi có người muốn mượn tài khoản ngân hàng hoặc thẻ ATM của bạn, hoặc bạn nghi mình bị lừa", th: "สายด่วนต่อต้านการหลอกลวง: เมื่อมีคนขอยืมบัญชีธนาคารหรือบัตร ATM ของคุณ หรือสงสัยว่าถูกหลอก" },
-    hotline1955: { zh: "勞動部勞工諮詢申訴專線：免付費，提供多種語言服務", en: "Ministry of Labor hotline: free, available in several languages", id: "Layanan Kementerian Tenaga Kerja: gratis, tersedia dalam berbagai bahasa", vi: "Đường dây của Bộ Lao động: miễn phí, có nhiều ngôn ngữ", th: "สายด่วนกระทรวงแรงงาน: โทรฟรี มีบริการหลายภาษา" },
+    otherPlaceholder: { zh: "請說明", en: "Please specify", id: "Sebutkan", vi: "Vui lòng ghi rõ", th: "โปรดระบุ", tl: "Pakitukoy" },
+    sendFailTitle: { zh: "網路好像不穩定", en: "The connection seems unstable", id: "Koneksi internet tidak stabil", vi: "Kết nối mạng không ổn định", th: "การเชื่อมต่ออินเทอร์เน็ตไม่เสถียร", tl: "Mukhang mahina ang koneksyon" },
+    sendFailBody: { zh: "你的答案還保存在這支手機裡，沒有遺失。請確認有網路後按「再試一次」。", en: "Your answers are still saved on this phone. Please check your internet and tap Try again.", id: "Jawaban Anda masih tersimpan di ponsel ini. Periksa koneksi internet lalu tekan Coba lagi.", vi: "Câu trả lời của bạn vẫn được lưu trên điện thoại này. Vui lòng kiểm tra mạng rồi nhấn Thử lại.", th: "คำตอบของคุณยังบันทึกอยู่ในโทรศัพท์เครื่องนี้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วกด ลองอีกครั้ง", tl: "Naka-save pa rin sa phone na ito ang iyong mga sagot. Tingnan ang iyong internet at pindutin ang Subukang muli." },
+    retry: { zh: "再試一次", en: "Try again", id: "Coba lagi", vi: "Thử lại", th: "ลองอีกครั้ง", tl: "Subukang muli" },
+    thanksTitle: { zh: "謝謝你的填答", en: "Thank you!", id: "Terima kasih!", vi: "Cảm ơn bạn!", th: "ขอบคุณ!", tl: "Salamat!" },
+    thanksBody: { zh: "你的回答已經送出。你的分享能幫助我們更了解外籍朋友在台灣的處境。", en: "Your answers have been sent. Thank you for helping us understand the situation of foreign workers in Taiwan.", id: "Jawaban Anda sudah terkirim. Terima kasih telah membantu kami memahami situasi pekerja asing di Taiwan.", vi: "Câu trả lời của bạn đã được gửi. Cảm ơn bạn đã giúp chúng tôi hiểu hơn về hoàn cảnh của lao động nước ngoài tại Đài Loan.", th: "ส่งคำตอบของคุณแล้ว ขอบคุณที่ช่วยให้เราเข้าใจสถานการณ์ของแรงงานต่างชาติในไต้หวัน", tl: "Naipadala na ang iyong mga sagot. Salamat sa pagtulong sa amin na maunawaan ang kalagayan ng mga foreign worker sa Taiwan." },
+    hotlineTitle: { zh: "需要幫忙時可以打這些電話", en: "Hotlines if you need help", id: "Nomor bantuan jika Anda membutuhkan", vi: "Đường dây hỗ trợ khi bạn cần", th: "สายด่วนเมื่อคุณต้องการความช่วยเหลือ", tl: "Mga hotline kung kailangan mo ng tulong" },
+    hotline165: { zh: "反詐騙諮詢專線：有人要借你的帳戶或提款卡、或懷疑被騙時", en: "Anti-fraud hotline: if someone asks to borrow your bank account or ATM card, or you think you were scammed", id: "Layanan anti-penipuan: jika ada yang ingin meminjam rekening bank atau kartu ATM Anda, atau Anda merasa ditipu", vi: "Đường dây chống lừa đảo: khi có người muốn mượn tài khoản ngân hàng hoặc thẻ ATM của bạn, hoặc bạn nghi mình bị lừa", th: "สายด่วนต่อต้านการหลอกลวง: เมื่อมีคนขอยืมบัญชีธนาคารหรือบัตร ATM ของคุณ หรือสงสัยว่าถูกหลอก", tl: "Anti-fraud hotline: kung may gustong humiram ng iyong bank account o ATM card, o sa tingin mo ay naloko ka" },
+    hotline1955: { zh: "勞動部勞工諮詢申訴專線：免付費，提供多種語言服務", en: "Ministry of Labor hotline: free, available in several languages", id: "Layanan Kementerian Tenaga Kerja: gratis, tersedia dalam berbagai bahasa", vi: "Đường dây của Bộ Lao động: miễn phí, có nhiều ngôn ngữ", th: "สายด่วนกระทรวงแรงงาน: โทรฟรี มีบริการหลายภาษา", tl: "Hotline ng Ministry of Labor: libre, may serbisyo sa iba't ibang wika" },
     shareAsk: { zh: "如果您認識在台灣工作的移工朋友，拜託您協助分享這份問卷給他們！", en: "If you know other migrant workers in Taiwan, please help share this survey with them! / Kung may kilala kang ibang migrant worker sa Taiwan, pakibahagi ang survey na ito sa kanila!", id: "Jika Anda mengenal pekerja migran lain di Taiwan, mohon bantu bagikan kuesioner ini kepada mereka!", vi: "Nếu bạn quen những lao động di trú khác tại Đài Loan, xin hãy giúp chia sẻ bảng câu hỏi này với họ!", th: "หากคุณรู้จักแรงงานข้ามชาติคนอื่นในไต้หวัน กรุณาช่วยแชร์แบบสอบถามนี้ให้พวกเขาด้วย" },
     share: { zh: "分享問卷連結", en: "Share the survey link / Ibahagi ang link", id: "Bagikan tautan kuesioner", vi: "Chia sẻ đường dẫn khảo sát", th: "แชร์ลิงก์แบบสอบถาม" },
-    copied: { zh: "已複製連結", en: "Link copied", id: "Tautan sudah disalin", vi: "Đã sao chép đường dẫn", th: "คัดลอกลิงก์แล้ว" },
+    copied: { zh: "已複製連結", en: "Link copied", id: "Tautan sudah disalin", vi: "Đã sao chép đường dẫn", th: "คัดลอกลิงก์แล้ว", tl: "Nakopya na ang link" },
     demoNote: { zh: "示範模式：尚未設定 scriptUrl，資料沒有送出。以下是會送到試算表的內容：", en: "Demo mode: no scriptUrl set, nothing was sent. This is what would be sent:" }
   },
 
   // 同意頁（開頭語）：英文版為研究者提供的正式版本；zh 為對照用；id / vi / th 由 Claude 草擬，待你提供正式翻譯
   consent: {
-    title: { zh: "在台移工的金融帳戶決策研究", en: "Financial account decision-making among migrant workers in Taiwan", id: "Pengambilan keputusan terkait rekening keuangan di kalangan pekerja migran di Taiwan", vi: "Quyết định về tài khoản tài chính của lao động di trú tại Đài Loan", th: "การตัดสินใจเกี่ยวกับบัญชีการเงินของแรงงานข้ามชาติในไต้หวัน" },
-    greeting: { zh: "親愛的參與者您好：", en: "Dear Participant,", id: "Peserta yang terhormat,", vi: "Kính gửi Quý vị tham gia,", th: "เรียน ผู้เข้าร่วมวิจัย" },
+    title: { zh: "在台移工的金融帳戶決策研究", en: "Financial account decision-making among migrant workers in Taiwan", tl: "Pagpapasya tungkol sa financial account ng mga migrant worker sa Taiwan", id: "Pengambilan keputusan terkait rekening keuangan di kalangan pekerja migran di Taiwan", vi: "Quyết định về tài khoản tài chính của lao động di trú tại Đài Loan", th: "การตัดสินใจเกี่ยวกับบัญชีการเงินของแรงงานข้ามชาติในไต้หวัน" },
+    greeting: { zh: "親愛的參與者您好：", en: "Dear Participant,", tl: "Mahal na Kalahok,", id: "Peserta yang terhormat,", vi: "Kính gửi Quý vị tham gia,", th: "เรียน ผู้เข้าร่วมวิจัย" },
     blocks: [
       { zh: "我是蔡逸騏，國立臺北大學的研究生，目前正在進行在台移工金融帳戶決策的研究。如果您年滿 18 歲、目前在台灣工作，誠摯邀請您填寫這份問卷，大約不到 10 分鐘即可完成。您的參與對這項研究非常重要，也可能有助於未來改善對移工的支持。",
         en: "My name is Yi-Chi Tsai, and I am a graduate student at National Taipei University. I am doing research on financial account decision-making among migrant workers in Taiwan. If you are at least 18 years old and currently working in Taiwan, I would like to invite you to fill out this questionnaire. It takes less than 10 minutes to complete. Your participation is important to the success of this research, and may help improve support for migrant workers in the future.",
+        tl: "Ako si Yi-Chi Tsai, isang graduate student sa National Taipei University. Gumagawa ako ng pananaliksik tungkol sa pagpapasya ng mga migrant worker sa Taiwan pagdating sa kanilang financial account. Kung ikaw ay hindi bababa sa 18 taong gulang at kasalukuyang nagtatrabaho sa Taiwan, iniimbitahan kitang sagutan ang questionnaire na ito. Wala pang 10 minuto ito matatapos. Mahalaga ang iyong pakikilahok sa tagumpay ng pananaliksik na ito, at maaari itong makatulong na mapabuti ang suporta para sa mga migrant worker sa hinaharap.",
         id: "Nama saya Yi-Chi Tsai, mahasiswa pascasarjana di National Taipei University. Saya sedang melakukan penelitian tentang pengambilan keputusan terkait rekening keuangan di kalangan pekerja migran di Taiwan. Jika Anda berusia minimal 18 tahun dan saat ini bekerja di Taiwan, saya mengundang Anda untuk mengisi kuesioner ini. Pengisiannya kurang dari 10 menit. Partisipasi Anda sangat penting bagi keberhasilan penelitian ini dan dapat membantu meningkatkan dukungan bagi pekerja migran di masa depan.",
         vi: "Tôi là Yi-Chi Tsai, học viên cao học tại Đại học Quốc gia Đài Bắc. Tôi đang nghiên cứu về việc ra quyết định liên quan đến tài khoản tài chính của lao động di trú tại Đài Loan. Nếu bạn từ 18 tuổi trở lên và hiện đang làm việc tại Đài Loan, tôi trân trọng mời bạn điền bảng câu hỏi này. Chỉ mất chưa đến 10 phút. Sự tham gia của bạn rất quan trọng đối với nghiên cứu này và có thể giúp cải thiện sự hỗ trợ dành cho lao động di trú trong tương lai.",
         th: "ผมชื่อ Yi-Chi Tsai เป็นนักศึกษาปริญญาโทที่มหาวิทยาลัยแห่งชาติไทเป กำลังทำวิจัยเรื่องการตัดสินใจเกี่ยวกับบัญชีการเงินของแรงงานข้ามชาติในไต้หวัน หากคุณอายุ 18 ปีขึ้นไปและปัจจุบันทำงานอยู่ในไต้หวัน ขอเชิญคุณตอบแบบสอบถามนี้ ใช้เวลาไม่ถึง 10 นาที การเข้าร่วมของคุณมีความสำคัญต่อความสำเร็จของงานวิจัยนี้ และอาจช่วยพัฒนาการสนับสนุนแรงงานข้ามชาติในอนาคต" },
       { zh: "本研究採匿名方式，並遵守學術倫理。所有資料僅供學術分析使用，不會提供給任何第三方。參與完全自願，您可以隨時停止填答，這不會影響您的工作或在台居留。請放心依照真實情況回答。",
         en: "This study is anonymous and follows academic ethics. All data will be used only for academic analysis and will not be shared with any third party. Participation is voluntary, and you may stop at any time. This will not affect your job or your stay in Taiwan. Please feel free to answer truthfully.",
+        tl: "Anonymous ang pag-aaral na ito at sumusunod sa akademikong etika. Gagamitin lamang ang lahat ng datos para sa akademikong pagsusuri at hindi ibabahagi sa anumang third party. Boluntaryo ang pakikilahok, at maaari kang tumigil anumang oras. Hindi ito makakaapekto sa iyong trabaho o sa iyong pananatili sa Taiwan. Huwag mag-alalang sumagot nang totoo.",
         id: "Penelitian ini bersifat anonim dan mengikuti etika akademik. Semua data hanya digunakan untuk analisis akademis dan tidak akan dibagikan kepada pihak ketiga mana pun. Partisipasi bersifat sukarela, dan Anda dapat berhenti kapan saja. Hal ini tidak akan memengaruhi pekerjaan atau masa tinggal Anda di Taiwan. Silakan menjawab dengan jujur tanpa ragu.",
         vi: "Nghiên cứu này là ẩn danh và tuân thủ đạo đức học thuật. Mọi dữ liệu chỉ được dùng cho phân tích học thuật và sẽ không được chia sẻ với bất kỳ bên thứ ba nào. Việc tham gia là tự nguyện, và bạn có thể dừng lại bất cứ lúc nào. Điều này sẽ không ảnh hưởng đến công việc hay việc lưu trú của bạn tại Đài Loan. Bạn cứ yên tâm trả lời đúng sự thật.",
         th: "งานวิจัยนี้ไม่ระบุตัวตนและปฏิบัติตามจริยธรรมทางวิชาการ ข้อมูลทั้งหมดจะใช้เพื่อการวิเคราะห์ทางวิชาการเท่านั้น และจะไม่เปิดเผยแก่บุคคลที่สามใดๆ การเข้าร่วมเป็นไปโดยสมัครใจ คุณสามารถหยุดได้ทุกเมื่อ ซึ่งจะไม่มีผลต่องานหรือการพำนักของคุณในไต้หวัน กรุณาตอบตามความจริงได้อย่างสบายใจ" },
       { zh: "如果您認識其他在台移工，歡迎將這份問卷分享給他們。感謝您對這項學術研究的支持與協助！如對本研究有任何疑問，歡迎來信聯絡：s711364105@gm.ntpu.edu.tw",
         en: "If you know other migrant workers in Taiwan, please share this questionnaire with them. Thank you for your support and assistance with this academic research! For any questions about this study, please feel free to contact me via email: s711364105@gm.ntpu.edu.tw",
+        tl: "Kung may kilala kang ibang migrant worker sa Taiwan, pakibahagi ang questionnaire na ito sa kanila. Salamat sa iyong suporta at tulong sa akademikong pananaliksik na ito! Para sa anumang tanong tungkol sa pag-aaral na ito, huwag mag-atubiling makipag-ugnayan sa akin sa email: s711364105@gm.ntpu.edu.tw",
         id: "Jika Anda mengenal pekerja migran lain di Taiwan, silakan bagikan kuesioner ini kepada mereka. Terima kasih atas dukungan dan bantuan Anda untuk penelitian akademis ini! Jika ada pertanyaan tentang penelitian ini, silakan hubungi saya melalui email: s711364105@gm.ntpu.edu.tw",
         vi: "Nếu bạn quen những lao động di trú khác tại Đài Loan, hãy chia sẻ bảng câu hỏi này với họ. Cảm ơn bạn đã ủng hộ và giúp đỡ nghiên cứu học thuật này! Nếu có bất kỳ câu hỏi nào về nghiên cứu, vui lòng liên hệ với tôi qua email: s711364105@gm.ntpu.edu.tw",
         th: "หากคุณรู้จักแรงงานข้ามชาติคนอื่นในไต้หวัน กรุณาแชร์แบบสอบถามนี้ให้พวกเขา ขอบคุณสำหรับการสนับสนุนและความช่วยเหลือต่องานวิจัยทางวิชาการนี้! หากมีคำถามเกี่ยวกับงานวิจัย ติดต่อได้ทางอีเมล: s711364105@gm.ntpu.edu.tw" }
     ],
     footer: [
       { zh: "國立臺北大學", en: "National Taipei University", id: "National Taipei University", vi: "Đại học Quốc gia Đài Bắc (National Taipei University)", th: "มหาวิทยาลัยแห่งชาติไทเป (National Taipei University)" },
-      { zh: "指導教授：Su-syan Jou 博士、Mao-hong Lin 博士", en: "Advisors: Su-syan Jou, Ph.D. and Mao-hong Lin, Ph.D.", id: "Pembimbing: Su-syan Jou, Ph.D. dan Mao-hong Lin, Ph.D.", vi: "Giảng viên hướng dẫn: TS. Su-syan Jou và TS. Mao-hong Lin", th: "อาจารย์ที่ปรึกษา: Su-syan Jou, Ph.D. และ Mao-hong Lin, Ph.D." },
-      { zh: "研究生：蔡逸騏", en: "Graduate Student: Yi-Chi Tsai", id: "Mahasiswa pascasarjana: Yi-Chi Tsai", vi: "Học viên cao học: Yi-Chi Tsai", th: "นักศึกษาปริญญาโท: Yi-Chi Tsai" }
+      { zh: "指導教授：Su-syan Jou 博士、Mao-hong Lin 博士", en: "Advisors: Su-syan Jou, Ph.D. and Mao-hong Lin, Ph.D.", tl: "Mga Tagapayo: Su-syan Jou, Ph.D. at Mao-hong Lin, Ph.D.", id: "Pembimbing: Su-syan Jou, Ph.D. dan Mao-hong Lin, Ph.D.", vi: "Giảng viên hướng dẫn: TS. Su-syan Jou và TS. Mao-hong Lin", th: "อาจารย์ที่ปรึกษา: Su-syan Jou, Ph.D. และ Mao-hong Lin, Ph.D." },
+      { zh: "研究生：蔡逸騏", en: "Graduate Student: Yi-Chi Tsai", tl: "Graduate Student: Yi-Chi Tsai", id: "Mahasiswa pascasarjana: Yi-Chi Tsai", vi: "Học viên cao học: Yi-Chi Tsai", th: "นักศึกษาปริญญาโท: Yi-Chi Tsai" }
     ]
   },
 
@@ -283,7 +291,7 @@ const CONFIG = {
       { id: "D03", type: "single", label: { zh: "請問您的婚姻狀態是？", en: "What is your marital status? / Ano ang iyong civil status?", id: "Apa status perkawinan Anda?", vi: "Tình trạng hôn nhân của bạn là gì?", th: "สถานภาพสมรสของคุณคืออะไร" }, options: [
         { value: 1, label: { zh: "單身", en: "Single / Walang asawa", id: "Belum menikah", vi: "Độc thân", th: "โสด" } },
         { value: 2, label: { zh: "已婚", en: "Married / May asawa", id: "Menikah", vi: "Đã kết hôn", th: "แต่งงานแล้ว" } },
-        { value: 3, label: { zh: "離婚", en: "Divorced / Hiwalay / Annulled", id: "Cerai", vi: "Đã ly hôn", th: "หย่าร้าง" } },
+        { value: 3, label: { zh: "離婚", en: "Divorced / Hiwalay / Annulled", eng: "Divorced / Hiwalay / Annulled", tl: "Divorced / Hiwalay / Annulled", id: "Cerai", vi: "Đã ly hôn", th: "หย่าร้าง" } },
         { value: 4, other: true, label: { zh: "其他", en: "Other / Iba pa", id: "Lainnya", vi: "Khác", th: "อื่นๆ" } } ] },
 
       { id: "D04", type: "single", label: { zh: "請問您有小孩嗎？", en: "Do you have any children? / May anak ka ba?", id: "Apakah Anda punya anak?", vi: "Bạn có con không?", th: "คุณมีบุตรหรือไม่" }, options: [
@@ -348,7 +356,7 @@ const CONFIG = {
 
       { id: "D10", type: "single",
         label: { zh: "請問您目前在臺灣的身分狀態是？", en: "What is your current status in Taiwan? / Ano ang kasalukuyan mong katayuan (status) dito sa Taiwan?", id: "Apa status Anda saat ini di Taiwan?", vi: "Tình trạng hiện tại của bạn tại Đài Loan là gì?", th: "สถานะปัจจุบันของคุณในไต้หวันคืออะไร" },
-        hint: { zh: "（本問卷採匿名填答，僅供學術研究使用）", en: "(This survey is anonymous and for academic research only. / Ang survey na ito ay anonymous at para lamang sa akademikong pananaliksik.)", id: "(Survei ini bersifat anonim dan hanya digunakan untuk penelitian akademis.)", vi: "(Khảo sát này là ẩn danh và chỉ dùng cho mục đích nghiên cứu học thuật.)", th: "(แบบสอบถามนี้ไม่ระบุตัวตน และใช้เพื่อการวิจัยทางวิชาการเท่านั้น)" },
+        hint: { zh: "（本問卷採匿名填答，僅供學術研究使用）", en: "(This survey is anonymous and for academic research only. / Ang survey na ito ay anonymous at para lamang sa akademikong pananaliksik.)", eng: "(This survey is anonymous and for academic research only.)", tl: "(Ang survey na ito ay anonymous at para lamang sa akademikong pananaliksik.)", id: "(Survei ini bersifat anonim dan hanya digunakan untuk penelitian akademis.)", vi: "(Khảo sát này là ẩn danh và chỉ dùng cho mục đích nghiên cứu học thuật.)", th: "(แบบสอบถามนี้ไม่ระบุตัวตน และใช้เพื่อการวิจัยทางวิชาการเท่านั้น)" },
         options: [
         { value: 1, label: { zh: "合法身分，目前有雇主", en: "Documented, currently working for an employer / Dokumentado, kasalukuyang may employer", id: "Berdokumen, saat ini bekerja pada majikan", vi: "Hợp pháp, hiện đang làm việc cho chủ", th: "ถูกกฎหมาย ปัจจุบันทำงานกับนายจ้าง" } },
         { value: 2, label: { zh: "合法身分，正在轉換雇主中", en: "Documented, in the process of transferring to a new employer / Dokumentado, kasalukuyang lumilipat sa bagong employer", id: "Berdokumen, sedang proses pindah majikan", vi: "Hợp pháp, đang trong thời gian chuyển chủ", th: "ถูกกฎหมาย อยู่ระหว่างเปลี่ยนนายจ้าง" } },
@@ -382,8 +390,28 @@ const dependedOn = new Set(allItems.filter(i => i.showIf).map(i => i.showIf.item
 function t(obj) {
   if (obj == null) return "";
   if (typeof obj === "string") return obj;
-  return obj[S.lang] ?? obj.en ?? obj.zh ?? Object.values(obj)[0];
+  if (obj[S.lang] != null) return obj[S.lang];
+  // 純英文版／純他加祿語版：從「English / Tagalog」雙語文字取出對應的部分
+  if ((S.lang === "eng" || S.lang === "tl") && obj.en != null) return splitBi(obj.en, S.lang);
+  return obj.en ?? obj.zh ?? Object.values(obj)[0];
 }
+// 雙語文字的兩種格式：段落式（英文段落\n\n他加祿語段落，情境題標題為 **Situation 1 / Sitwasyon 1**）與單行式（English / Tagalog）
+// 沒有他加祿語的文字（例如城市名、金額選項），純他加祿語版會顯示原文
+function splitBi(s, lang) {
+  const p = s.indexOf("\n\n");
+  if (p >= 0) {
+    const a = s.slice(0, p), b = s.slice(p + 2);
+    const m = a.match(/^\*\*(.+?) \/ (.+?)\*\*\n/);
+    if (m) return lang === "eng" ? a.replace(m[0], "**" + m[1] + "**\n") : "**" + m[2] + "**\n" + b;
+    return lang === "eng" ? a : b;
+  }
+  const i = s.indexOf(" / ");
+  if (i < 0) return s;
+  return lang === "eng" ? s.slice(0, i) : s.slice(i + 3);
+}
+// 用指定語言取文字（首頁卡片要同時顯示各語言的標題）
+function tIn(obj, lang) { const prev = S.lang; S.lang = lang; const r = t(obj); S.lang = prev; return r; }
+const HTML_LANG = { zh: "zh-Hant", en: "en", eng: "en", tl: "tl" };
 function ui(key, vars) {
   let s = t(CONFIG.ui[key]);
   if (vars) for (const k in vars) s = s.replace("{" + k + "}", vars[k]);
@@ -436,7 +464,7 @@ function scaleOpts(item) {
   return Array.from({ length: n }, (_, i) => {
     const v = i + 1;
     const end = v === 1 ? item.anchors.low : v === n ? item.anchors.high : null;
-    return { value: v, label: end ? { en: v + " · " + (end.en || ""), ...Object.fromEntries(Object.entries(end).map(([k, x]) => [k, v + " · " + x])) } : String(v) };
+    return { value: v, label: end ? v + " · " + t(end) : String(v) };
   });
 }
 function answered(item) {
@@ -458,13 +486,13 @@ function numError(item) {
 /* ---------- 畫面 ---------- */
 function render() {
   app.replaceChildren();
-  document.documentElement.lang = S.lang === "zh" ? "zh-Hant" : (S.lang || "zh-Hant");
+  document.documentElement.lang = HTML_LANG[S.lang] || S.lang || "zh-Hant";
   ({ lang: renderLang, consent: renderConsent, declined: renderDeclined, section: renderSection,
      sending: renderSending, failed: renderFailed, thanks: renderThanks })[S.page]();
 }
 
 function renderLang() {
-  const htmlLang = { zh: "zh-Hant" };
+  const htmlLang = HTML_LANG;
   add(
     el("div", { class: "eyebrow", text: "National Taipei University · 國立臺北大學" }),
     el("p", { class: "choose-lang" },
@@ -476,7 +504,7 @@ function renderLang() {
       onclick: () => { S.lang = l.code; go("consent"); } },
       el("span", { class: "lang-text" },
         el("span", { class: "lang-name", text: l.name }),
-        el("span", { class: "lang-title", text: CONFIG.consent.title[l.code] || "" })),
+        el("span", { class: "lang-title", text: tIn(CONFIG.consent.title, l.code) })),
       el("span", { class: "lang-arrow", "aria-hidden": "true", text: "›" })))
   );
 }
