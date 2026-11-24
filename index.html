@@ -6,7 +6,7 @@
 <title>Survey for Foreign Workers in Taiwan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <!-- 字型非同步載入：網路慢時不會卡住問卷 -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+Thai:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
   :root {
     --bg: #F6F8F7; --card: #FFFFFF; --line: #DCE3E0; --ink: #14202B; --body: #2C3A46;
@@ -23,14 +23,29 @@
   .eyebrow { font-size: 13px; font-weight: 600; color: var(--muted); }
   .muted { color: var(--muted); font-size: 13px; line-height: 1.6; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .letter { gap: 14px; }
+  .share { gap: 14px; }
+  .share-ask { font-size: 16px; font-weight: 600; color: var(--ink); }
+  .share-ask .bi-tl { font-weight: 400; }
+  .btn .bi-tl { font-size: 0.8em; font-weight: 400; color: inherit; opacity: .9; }
+  .vignette.context { margin-bottom: 4px; }
+  .bi-en { display: block; }
+  .bi-tl { display: block; margin-top: 3px; font-weight: 400; font-size: 0.9em; color: var(--muted); }
+  h1 .bi-tl { font-size: 0.62em; margin-top: 4px; }
+  .choose-lang { font-size: 15px; line-height: 1.7; color: var(--muted); }
+  .choose-lang .phrase { white-space: nowrap; }
+  .signoff { font-size: 14px; line-height: 1.7; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; }
   .card.missing { border-color: #D97706; box-shadow: 0 0 0 2px #FDE7C7; }
   .chips { display: flex; gap: 8px; flex-wrap: wrap; }
   .chip { background: var(--tint); color: var(--accent-dark); font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; }
   .lang-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 60px; padding: 12px 18px;
     background: var(--card); border: 1px solid var(--line); border-radius: 14px; font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
   .lang-btn:hover, .lang-btn:focus-visible { border-color: var(--accent); }
-  .lang-name { font-size: 17px; font-weight: 600; display: block; }
-  .lang-sub { font-size: 12px; color: var(--muted); display: block; margin-top: 2px; }
+  .lang-btn { gap: 12px; padding: 16px 18px; }
+  .lang-text { display: flex; flex-direction: column; gap: 4px; }
+  .lang-name { font-size: 17px; font-weight: 700; display: block; }
+  .lang-title { font-size: 14px; line-height: 1.5; color: var(--body); display: block; }
+  .lang-arrow { font-size: 22px; color: var(--accent); }
   .btn { min-height: 54px; border-radius: 14px; font: inherit; font-size: 17px; font-weight: 700; cursor: pointer; padding: 0 20px; border: 1.5px solid var(--accent); }
   .btn-primary { background: var(--accent); color: #fff; }
   .btn-primary:disabled { background: #9DB8B2; border-color: #9DB8B2; cursor: not-allowed; }
@@ -42,12 +57,23 @@
   legend { font-size: 16px; font-weight: 600; line-height: 1.5; margin-bottom: 8px; padding: 0; }
   .opt { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; font-size: 15px; line-height: 1.4; }
   .opt:has(input:checked) { border-color: var(--accent); background: var(--tint); }
-  .opt input { width: 20px; height: 20px; margin: 0; accent-color: var(--accent); flex-shrink: 0; }
+  /* 自訂圓圈：未選是白色，選了才填色 */
+  .opt input { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; margin: 0; flex-shrink: 0;
+    border: 2px solid #B7C4C0; border-radius: 50%; background: #fff; cursor: pointer; }
+  .opt input:checked { border-color: var(--accent); box-shadow: inset 0 0 0 4px #fff; background: var(--accent); }
+  .opt input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .check { display: flex; align-items: flex-start; gap: 12px; min-height: 44px; font-size: 15px; line-height: 1.5; cursor: pointer; }
   .check input { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--accent); flex-shrink: 0; }
   label.q { font-size: 16px; font-weight: 600; line-height: 1.5; }
   input[type=number], textarea { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
   textarea { min-height: 110px; resize: vertical; }
+  input[type=text].other-in { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+  select { width: 100%; min-height: 50px; font: inherit; font-size: 16px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+  .num-row { display: flex; align-items: center; gap: 10px; }
+  .num-row input { flex: 0 1 140px; }
+  .num-row input.money-in { flex: 1 1 auto; min-width: 0; font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+  .unit { font-size: 15px; color: var(--body); white-space: nowrap; }
+  .hint { font-size: 13px; line-height: 1.55; color: var(--muted); margin-top: -4px; }
   .err { color: var(--err); font-size: 14px; }
   .banner { background: var(--warn-bg); color: var(--warn-ink); border-radius: 12px; padding: 14px 16px; font-size: 14px; line-height: 1.55; }
   .progress { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
@@ -56,6 +82,33 @@
   .hotline { display: flex; align-items: center; gap: 14px; }
   .hotline b { min-width: 64px; font-size: 22px; color: var(--accent); }
   .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .slider-wrap { display: flex; flex-direction: column; gap: 8px; padding-top: 8px; }
+  /* 拉桿：自訂外觀，不顯示「填滿」，避免看起來像已經有預設答案 */
+  .slider, .slider-v { -webkit-appearance: none; appearance: none; background: transparent; margin: 0; cursor: pointer; }
+  .slider { width: 100%; height: 36px; }
+  .slider-v { writing-mode: vertical-lr; direction: rtl; width: 36px; height: 100%; }
+  .slider::-webkit-slider-runnable-track { height: 8px; background: var(--line); border-radius: 999px; }
+  .slider-v::-webkit-slider-runnable-track { width: 8px; background: var(--line); border-radius: 999px; }
+  .slider::-moz-range-track { height: 8px; background: var(--line); border-radius: 999px; }
+  .slider-v::-moz-range-track { width: 8px; background: var(--line); border-radius: 999px; }
+  .slider::-webkit-slider-thumb, .slider-v::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--accent), 0 1px 3px rgba(0,0,0,.25); }
+  .slider::-webkit-slider-thumb { margin-top: -10px; }
+  .slider-v::-webkit-slider-thumb { margin-left: -10px; }
+  .slider::-moz-range-thumb, .slider-v::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--accent); }
+  .slider.untouched::-webkit-slider-thumb, .slider-v.untouched::-webkit-slider-thumb { opacity: 0; }
+  .slider.untouched::-moz-range-thumb, .slider-v.untouched::-moz-range-thumb { opacity: 0; }
+  .slider:focus-visible, .slider-v:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px; }
+  /* 刻度對準拉桿上的 5 個位置（拉桿頭 28px，兩端內縮 14px） */
+  .ticks { position: relative; height: 20px; margin: 0 14px; font-size: 14px; font-weight: 600; color: var(--body); }
+  .ticks span { position: absolute; top: 0; transform: translateX(-50%); }
+  .ends { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); }
+  .ends > span { display: block; }
+  .ends > span:last-child { text-align: right; }
+  .slider-v-wrap { display: flex; gap: 16px; align-items: stretch; height: 260px; padding: 8px 0; }
+  .ticks-v { position: relative; flex: 1; margin: 14px 0; font-size: 14px; color: var(--body); }
+  .ticks-v span { position: absolute; left: 0; transform: translateY(-50%); }
+  .slider-val { font-size: 15px; font-weight: 700; color: var(--accent); min-height: 22px; }
   pre { white-space: pre-wrap; word-break: break-all; font-size: 12px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
 </style>
 </head>
@@ -70,116 +123,239 @@ const CONFIG = {
   // 部署 Google Apps Script 後，把網址貼在這裡。留空 = 示範模式（不會送出，只顯示資料）
   scriptUrl: "https://script.google.com/macros/s/AKfycbzf2E7Zlvf6HU-4jVyyj5reyw_6NWmnrqNTF4rw8QI0-bu3bADcm3CyxHqeqxJQ4zqaXQ/exec",
   surveyId: "mw-survey",
-  version: "v0.1-prototype",
+  version: "v0.19-prototype",
+  scaleLayout: "slider-h", // 所有量表題的預設呈現方式：橫向拉桿
+  // 金額題的貨幣：先依「語言」假設國籍（英文版假設為菲律賓）。試算表會另存「題號_cur」記錄用了哪種貨幣
+  currency: {
+    id: { code: "IDR", unit: "Rupiah (Rp)", locale: "id-ID" },
+    vi: { code: "VND", unit: "đồng (VND)", locale: "vi-VN" },
+    en: { code: "PHP", unit: "Philippine peso (₱)", locale: "en-US" },
+    th: { code: "THB", unit: "บาท (THB)", locale: "th-TH" },
+    zh: { code: "HOME", unit: "（母國貨幣）", locale: "zh-TW" }
+  },
   missingCode: -99,      // 有看到但沒回答
   notShownCode: -98,     // 因跳題沒有顯示
 
-  // 語言：新增語言時，在這裡加一行，並在下面每段文字補上該語言
+  // 語言：新增語言時，在這裡加一行，並在下面每段文字補上該語言（沒補的會先顯示英文）
   languages: [
-    { code: "zh", name: "繁體中文", sub: "Traditional Chinese" },
-    { code: "en", name: "English", sub: "For Filipino and other workers" }
+    { code: "id", name: "Bahasa Indonesia" },
+    { code: "vi", name: "Tiếng Việt" },
+    { code: "en", name: "English / Tagalog" },
+    { code: "th", name: "ภาษาไทย" },
+    { code: "zh", name: "繁體中文" }
   ],
 
+  // 首頁：各語言的「請選擇語言」（研究標題取自下方 consent.title）（id / vi / th / Tagalog 由 Claude 草擬，待確認）
+  landing: {
+    choose: {
+      id: "Pilih bahasa",
+      vi: "Chọn ngôn ngữ",
+      en: "Choose your language / Pumili ng wika",
+      th: "เลือกภาษา",
+      zh: "請選擇語言"
+    }
+  },
+
+  // ※ 介面文字與同意頁的 id / vi / th 版本由 Claude 草擬，尚待母語者確認
   ui: {
-    university: { zh: "國立臺北大學", en: "National Taipei University" },
-    chooseLang: { zh: "請選擇語言", en: "Choose your language" },
-    anonymous: { zh: "匿名填答", en: "Anonymous" },
-    minutes: { zh: "約 [XX] 分鐘", en: "About [XX] min" },
-    noId: { zh: "不會收集姓名、證件號碼或電話。", en: "No name, ID or phone number is collected." },
-    changeLang: { zh: "更換語言", en: "Change language" },
-    consentTitle: { zh: "在填寫之前，請先了解這份問卷", en: "Before you start, please read this" },
-    ageCheck: { zh: "我已年滿 18 歲，目前在台灣工作。", en: "I am 18 or older and currently working in Taiwan." },
-    agreeCheck: { zh: "我已閱讀以上說明，同意參加。", en: "I have read the information above and agree to take part." },
-    start: { zh: "開始填寫", en: "Start" },
-    decline: { zh: "我不想參加", en: "I do not want to take part" },
-    declinedTitle: { zh: "謝謝你的時間", en: "Thank you for your time" },
-    declinedBody: { zh: "你沒有參加這份問卷，沒有任何資料被送出。", en: "You did not take the survey. No information was sent." },
-    next: { zh: "下一頁", en: "Next" },
-    back: { zh: "上一頁", en: "Back" },
-    submit: { zh: "送出", en: "Submit" },
-    sending: { zh: "送出中…", en: "Sending…" },
-    missingBanner: { zh: "有題目還沒回答（已用橘色標示）。如果是不想回答，可以直接再按一次「下一頁」。", en: "Some questions are not answered (marked in orange). If you prefer not to answer, tap Next again." },
-    numRange: { zh: "請輸入 {min} 到 {max} 之間的數字", en: "Please enter a number from {min} to {max}" },
-    page: { zh: "第 {n} / {total} 頁", en: "Page {n} of {total}" },
-    sendFailTitle: { zh: "網路好像不穩定", en: "The connection seems unstable" },
-    sendFailBody: { zh: "你的答案還保存在這支手機裡，沒有遺失。請確認有網路後按「再試一次」。", en: "Your answers are still saved on this phone. Please check your internet and tap Try again." },
-    retry: { zh: "再試一次", en: "Try again" },
-    thanksTitle: { zh: "謝謝你的填答", en: "Thank you!" },
-    thanksBody: { zh: "你的回答已經送出。你的分享能幫助我們更了解外籍朋友在台灣的處境。", en: "Your answers have been sent. Thank you for helping us understand the situation of foreign workers in Taiwan." },
-    hotlineTitle: { zh: "需要幫忙時可以打這些電話", en: "Hotlines if you need help" },
-    hotline165: { zh: "反詐騙諮詢專線：有人要借你的帳戶或提款卡、或懷疑被騙時", en: "Anti-fraud hotline: if someone asks to borrow your bank account or ATM card, or you think you were scammed" },
-    hotline1955: { zh: "勞動部勞工諮詢申訴專線：免付費，提供多種語言服務", en: "Ministry of Labor hotline: free, available in several languages" },
-    share: { zh: "複製問卷連結，分享給朋友", en: "Copy the survey link for friends" },
-    copied: { zh: "已複製連結", en: "Link copied" },
+    university: { zh: "國立臺北大學", en: "National Taipei University", id: "National Taipei University", vi: "Đại học Quốc gia Đài Bắc", th: "มหาวิทยาลัยแห่งชาติไทเป" },
+    anonymous: { zh: "匿名填答", en: "Anonymous", id: "Anonim", vi: "Ẩn danh", th: "ไม่ระบุตัวตน" },
+    minutes: { zh: "不到 10 分鐘", en: "Less than 10 min", id: "Kurang dari 10 menit", vi: "Dưới 10 phút", th: "ไม่ถึง 10 นาที" },
+    changeLang: { zh: "更換語言", en: "Change language", id: "Ganti bahasa", vi: "Đổi ngôn ngữ", th: "เปลี่ยนภาษา" },
+    consentTitle: { zh: "在填寫之前，請先了解這份問卷", en: "Before you start, please read this", id: "Sebelum mulai, mohon baca informasi ini", vi: "Trước khi bắt đầu, vui lòng đọc thông tin sau", th: "ก่อนเริ่ม กรุณาอ่านข้อมูลนี้" },
+    ageCheck: { zh: "我已年滿 18 歲，目前在台灣工作。", en: "I am 18 or older and currently working in Taiwan.", id: "Saya berusia 18 tahun ke atas dan saat ini bekerja di Taiwan.", vi: "Tôi từ 18 tuổi trở lên và hiện đang làm việc tại Đài Loan.", th: "ฉันอายุ 18 ปีขึ้นไป และปัจจุบันทำงานอยู่ในไต้หวัน" },
+    agreeCheck: { zh: "我已閱讀以上說明，同意參加。", en: "I have read the information above and agree to take part.", id: "Saya sudah membaca informasi di atas dan setuju untuk ikut serta.", vi: "Tôi đã đọc thông tin trên và đồng ý tham gia.", th: "ฉันได้อ่านข้อมูลข้างต้นแล้ว และยินยอมเข้าร่วม" },
+    start: { zh: "開始填寫", en: "Start", id: "Mulai", vi: "Bắt đầu", th: "เริ่ม" },
+    decline: { zh: "我不想參加", en: "I do not want to take part", id: "Saya tidak ingin ikut serta", vi: "Tôi không muốn tham gia", th: "ฉันไม่ต้องการเข้าร่วม" },
+    declinedTitle: { zh: "謝謝你的時間", en: "Thank you for your time", id: "Terima kasih atas waktu Anda", vi: "Cảm ơn bạn đã dành thời gian", th: "ขอบคุณที่สละเวลา" },
+    declinedBody: { zh: "你沒有參加這份問卷，沒有任何資料被送出。", en: "You did not take the survey. No information was sent.", id: "Anda tidak mengisi survei ini. Tidak ada informasi yang dikirim.", vi: "Bạn không tham gia khảo sát. Không có thông tin nào được gửi đi.", th: "คุณไม่ได้ทำแบบสอบถามนี้ และไม่มีข้อมูลใดถูกส่งไป" },
+    backToStart: { zh: "回到首頁", en: "Back to start", id: "Kembali ke awal", vi: "Về trang đầu", th: "กลับไปหน้าแรก" },
+    next: { zh: "下一頁", en: "Next", id: "Berikutnya", vi: "Tiếp theo", th: "ถัดไป" },
+    back: { zh: "上一頁", en: "Back", id: "Kembali", vi: "Quay lại", th: "ย้อนกลับ" },
+    submit: { zh: "送出", en: "Submit", id: "Kirim", vi: "Gửi", th: "ส่ง" },
+    sending: { zh: "送出中…", en: "Sending…", id: "Mengirim…", vi: "Đang gửi…", th: "กำลังส่ง…" },
+    missingBanner: { zh: "有題目還沒回答（已用橘色標示）。如果是不想回答，可以直接再按一次。", en: "Some questions are not answered (marked in orange). If you prefer not to answer, just tap the button again.", id: "Ada pertanyaan yang belum dijawab (ditandai oranye). Jika Anda tidak ingin menjawab, tekan tombolnya sekali lagi.", vi: "Có câu hỏi chưa được trả lời (đánh dấu màu cam). Nếu bạn không muốn trả lời, hãy nhấn nút thêm một lần nữa.", th: "มีคำถามที่ยังไม่ได้ตอบ (มีกรอบสีส้ม) หากคุณไม่ต้องการตอบ กดปุ่มอีกครั้งได้เลย" },
+    numRange: { zh: "請輸入 {min} 到 {max} 之間的數字", en: "Please enter a number from {min} to {max}", id: "Masukkan angka dari {min} sampai {max}", vi: "Vui lòng nhập số từ {min} đến {max}", th: "กรุณากรอกตัวเลขตั้งแต่ {min} ถึง {max}" },
+    page: { zh: "第 {n} / {total} 頁", en: "Page {n} of {total}", id: "Halaman {n} dari {total}", vi: "Trang {n}/{total}", th: "หน้า {n} จาก {total}" },
+    choose: { zh: "請選擇", en: "Please choose / Pumili", id: "Silakan pilih", vi: "Vui lòng chọn", th: "กรุณาเลือก" },
+    otherPlaceholder: { zh: "請說明", en: "Please specify", id: "Sebutkan", vi: "Vui lòng ghi rõ", th: "โปรดระบุ" },
+    sendFailTitle: { zh: "網路好像不穩定", en: "The connection seems unstable", id: "Koneksi internet tidak stabil", vi: "Kết nối mạng không ổn định", th: "การเชื่อมต่ออินเทอร์เน็ตไม่เสถียร" },
+    sendFailBody: { zh: "你的答案還保存在這支手機裡，沒有遺失。請確認有網路後按「再試一次」。", en: "Your answers are still saved on this phone. Please check your internet and tap Try again.", id: "Jawaban Anda masih tersimpan di ponsel ini. Periksa koneksi internet lalu tekan Coba lagi.", vi: "Câu trả lời của bạn vẫn được lưu trên điện thoại này. Vui lòng kiểm tra mạng rồi nhấn Thử lại.", th: "คำตอบของคุณยังบันทึกอยู่ในโทรศัพท์เครื่องนี้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วกด ลองอีกครั้ง" },
+    retry: { zh: "再試一次", en: "Try again", id: "Coba lagi", vi: "Thử lại", th: "ลองอีกครั้ง" },
+    thanksTitle: { zh: "謝謝你的填答", en: "Thank you!", id: "Terima kasih!", vi: "Cảm ơn bạn!", th: "ขอบคุณ!" },
+    thanksBody: { zh: "你的回答已經送出。你的分享能幫助我們更了解外籍朋友在台灣的處境。", en: "Your answers have been sent. Thank you for helping us understand the situation of foreign workers in Taiwan.", id: "Jawaban Anda sudah terkirim. Terima kasih telah membantu kami memahami situasi pekerja asing di Taiwan.", vi: "Câu trả lời của bạn đã được gửi. Cảm ơn bạn đã giúp chúng tôi hiểu hơn về hoàn cảnh của lao động nước ngoài tại Đài Loan.", th: "ส่งคำตอบของคุณแล้ว ขอบคุณที่ช่วยให้เราเข้าใจสถานการณ์ของแรงงานต่างชาติในไต้หวัน" },
+    hotlineTitle: { zh: "需要幫忙時可以打這些電話", en: "Hotlines if you need help", id: "Nomor bantuan jika Anda membutuhkan", vi: "Đường dây hỗ trợ khi bạn cần", th: "สายด่วนเมื่อคุณต้องการความช่วยเหลือ" },
+    hotline165: { zh: "反詐騙諮詢專線：有人要借你的帳戶或提款卡、或懷疑被騙時", en: "Anti-fraud hotline: if someone asks to borrow your bank account or ATM card, or you think you were scammed", id: "Layanan anti-penipuan: jika ada yang ingin meminjam rekening bank atau kartu ATM Anda, atau Anda merasa ditipu", vi: "Đường dây chống lừa đảo: khi có người muốn mượn tài khoản ngân hàng hoặc thẻ ATM của bạn, hoặc bạn nghi mình bị lừa", th: "สายด่วนต่อต้านการหลอกลวง: เมื่อมีคนขอยืมบัญชีธนาคารหรือบัตร ATM ของคุณ หรือสงสัยว่าถูกหลอก" },
+    hotline1955: { zh: "勞動部勞工諮詢申訴專線：免付費，提供多種語言服務", en: "Ministry of Labor hotline: free, available in several languages", id: "Layanan Kementerian Tenaga Kerja: gratis, tersedia dalam berbagai bahasa", vi: "Đường dây của Bộ Lao động: miễn phí, có nhiều ngôn ngữ", th: "สายด่วนกระทรวงแรงงาน: โทรฟรี มีบริการหลายภาษา" },
+    shareAsk: { zh: "如果您認識在台灣工作的移工朋友，拜託您協助分享這份問卷給他們！", en: "If you know other migrant workers in Taiwan, please help share this survey with them! / Kung may kilala kang ibang migrant worker sa Taiwan, pakibahagi ang survey na ito sa kanila!", id: "Jika Anda mengenal pekerja migran lain di Taiwan, mohon bantu bagikan kuesioner ini kepada mereka!", vi: "Nếu bạn quen những lao động di trú khác tại Đài Loan, xin hãy giúp chia sẻ bảng câu hỏi này với họ!", th: "หากคุณรู้จักแรงงานข้ามชาติคนอื่นในไต้หวัน กรุณาช่วยแชร์แบบสอบถามนี้ให้พวกเขาด้วย" },
+    share: { zh: "分享問卷連結", en: "Share the survey link / Ibahagi ang link", id: "Bagikan tautan kuesioner", vi: "Chia sẻ đường dẫn khảo sát", th: "แชร์ลิงก์แบบสอบถาม" },
+    copied: { zh: "已複製連結", en: "Link copied", id: "Tautan sudah disalin", vi: "Đã sao chép đường dẫn", th: "คัดลอกลิงก์แล้ว" },
     demoNote: { zh: "示範模式：尚未設定 scriptUrl，資料沒有送出。以下是會送到試算表的內容：", en: "Demo mode: no scriptUrl set, nothing was sent. This is what would be sent:" }
   },
 
-  // 同意頁的段落
-  consent: [
-    { title: { zh: "這份問卷在做什麼", en: "What is this survey about" },
-      body: { zh: "我們想了解在台灣工作的外籍朋友，平常的經濟狀況和遇到各種情況時的想法。答案沒有對錯，請依照你真實的想法回答。", en: "We want to learn about the financial situation of foreign workers in Taiwan and what they think in different situations. There are no right or wrong answers." } },
-    { title: { zh: "你的資料很安全", en: "Your information is safe" },
-      body: { zh: "不會問你的姓名、居留證號、護照號碼或電話。資料只用於學術研究，不會交給雇主、仲介或任何政府機關，結果只會以整體統計呈現。", en: "We will not ask for your name, ARC number, passport number or phone number. The data is only for academic research and will not be given to employers, agencies or any government office. Results are only reported as group statistics." } },
-    { title: { zh: "你的權利", en: "Your rights" },
-      body: { zh: "參加完全自願。你可以跳過不想回答的題目，也可以隨時關掉網頁停止填寫，不會對你的工作或居留有任何影響。", en: "Taking part is voluntary. You can skip any question and stop at any time by closing the page. This will not affect your job or residence in any way." } },
-    { title: { zh: "有問題可以聯絡", en: "Contact" },
-      body: { zh: "研究者：蔡逸騏 · [EMAIL]\n倫理審查核准編號：[IRB NO.]", en: "Researcher: Yi-Chi Tsai · [EMAIL]\nEthics approval no.: [IRB NO.]" } }
-  ],
+  // 同意頁（開頭語）：英文版為研究者提供的正式版本；zh 為對照用；id / vi / th 由 Claude 草擬，待你提供正式翻譯
+  consent: {
+    title: { zh: "在台移工的金融帳戶決策研究", en: "Financial account decision-making among migrant workers in Taiwan", id: "Pengambilan keputusan terkait rekening keuangan di kalangan pekerja migran di Taiwan", vi: "Quyết định về tài khoản tài chính của lao động di trú tại Đài Loan", th: "การตัดสินใจเกี่ยวกับบัญชีการเงินของแรงงานข้ามชาติในไต้หวัน" },
+    greeting: { zh: "親愛的參與者您好：", en: "Dear Participant,", id: "Peserta yang terhormat,", vi: "Kính gửi Quý vị tham gia,", th: "เรียน ผู้เข้าร่วมวิจัย" },
+    blocks: [
+      { zh: "我是蔡逸騏，國立臺北大學的研究生，目前正在進行在台移工金融帳戶決策的研究。如果您年滿 18 歲、目前在台灣工作，誠摯邀請您填寫這份問卷，大約不到 10 分鐘即可完成。您的參與對這項研究非常重要，也可能有助於未來改善對移工的支持。",
+        en: "My name is Yi-Chi Tsai, and I am a graduate student at National Taipei University. I am doing research on financial account decision-making among migrant workers in Taiwan. If you are at least 18 years old and currently working in Taiwan, I would like to invite you to fill out this questionnaire. It takes less than 10 minutes to complete. Your participation is important to the success of this research, and may help improve support for migrant workers in the future.",
+        id: "Nama saya Yi-Chi Tsai, mahasiswa pascasarjana di National Taipei University. Saya sedang melakukan penelitian tentang pengambilan keputusan terkait rekening keuangan di kalangan pekerja migran di Taiwan. Jika Anda berusia minimal 18 tahun dan saat ini bekerja di Taiwan, saya mengundang Anda untuk mengisi kuesioner ini. Pengisiannya kurang dari 10 menit. Partisipasi Anda sangat penting bagi keberhasilan penelitian ini dan dapat membantu meningkatkan dukungan bagi pekerja migran di masa depan.",
+        vi: "Tôi là Yi-Chi Tsai, học viên cao học tại Đại học Quốc gia Đài Bắc. Tôi đang nghiên cứu về việc ra quyết định liên quan đến tài khoản tài chính của lao động di trú tại Đài Loan. Nếu bạn từ 18 tuổi trở lên và hiện đang làm việc tại Đài Loan, tôi trân trọng mời bạn điền bảng câu hỏi này. Chỉ mất chưa đến 10 phút. Sự tham gia của bạn rất quan trọng đối với nghiên cứu này và có thể giúp cải thiện sự hỗ trợ dành cho lao động di trú trong tương lai.",
+        th: "ผมชื่อ Yi-Chi Tsai เป็นนักศึกษาปริญญาโทที่มหาวิทยาลัยแห่งชาติไทเป กำลังทำวิจัยเรื่องการตัดสินใจเกี่ยวกับบัญชีการเงินของแรงงานข้ามชาติในไต้หวัน หากคุณอายุ 18 ปีขึ้นไปและปัจจุบันทำงานอยู่ในไต้หวัน ขอเชิญคุณตอบแบบสอบถามนี้ ใช้เวลาไม่ถึง 10 นาที การเข้าร่วมของคุณมีความสำคัญต่อความสำเร็จของงานวิจัยนี้ และอาจช่วยพัฒนาการสนับสนุนแรงงานข้ามชาติในอนาคต" },
+      { zh: "本研究採匿名方式，並遵守學術倫理。所有資料僅供學術分析使用，不會提供給任何第三方。參與完全自願，您可以隨時停止填答，這不會影響您的工作或在台居留。請放心依照真實情況回答。",
+        en: "This study is anonymous and follows academic ethics. All data will be used only for academic analysis and will not be shared with any third party. Participation is voluntary, and you may stop at any time. This will not affect your job or your stay in Taiwan. Please feel free to answer truthfully.",
+        id: "Penelitian ini bersifat anonim dan mengikuti etika akademik. Semua data hanya digunakan untuk analisis akademis dan tidak akan dibagikan kepada pihak ketiga mana pun. Partisipasi bersifat sukarela, dan Anda dapat berhenti kapan saja. Hal ini tidak akan memengaruhi pekerjaan atau masa tinggal Anda di Taiwan. Silakan menjawab dengan jujur tanpa ragu.",
+        vi: "Nghiên cứu này là ẩn danh và tuân thủ đạo đức học thuật. Mọi dữ liệu chỉ được dùng cho phân tích học thuật và sẽ không được chia sẻ với bất kỳ bên thứ ba nào. Việc tham gia là tự nguyện, và bạn có thể dừng lại bất cứ lúc nào. Điều này sẽ không ảnh hưởng đến công việc hay việc lưu trú của bạn tại Đài Loan. Bạn cứ yên tâm trả lời đúng sự thật.",
+        th: "งานวิจัยนี้ไม่ระบุตัวตนและปฏิบัติตามจริยธรรมทางวิชาการ ข้อมูลทั้งหมดจะใช้เพื่อการวิเคราะห์ทางวิชาการเท่านั้น และจะไม่เปิดเผยแก่บุคคลที่สามใดๆ การเข้าร่วมเป็นไปโดยสมัครใจ คุณสามารถหยุดได้ทุกเมื่อ ซึ่งจะไม่มีผลต่องานหรือการพำนักของคุณในไต้หวัน กรุณาตอบตามความจริงได้อย่างสบายใจ" },
+      { zh: "如果您認識其他在台移工，歡迎將這份問卷分享給他們。感謝您對這項學術研究的支持與協助！如對本研究有任何疑問，歡迎來信聯絡：s711364105@gm.ntpu.edu.tw",
+        en: "If you know other migrant workers in Taiwan, please share this questionnaire with them. Thank you for your support and assistance with this academic research! For any questions about this study, please feel free to contact me via email: s711364105@gm.ntpu.edu.tw",
+        id: "Jika Anda mengenal pekerja migran lain di Taiwan, silakan bagikan kuesioner ini kepada mereka. Terima kasih atas dukungan dan bantuan Anda untuk penelitian akademis ini! Jika ada pertanyaan tentang penelitian ini, silakan hubungi saya melalui email: s711364105@gm.ntpu.edu.tw",
+        vi: "Nếu bạn quen những lao động di trú khác tại Đài Loan, hãy chia sẻ bảng câu hỏi này với họ. Cảm ơn bạn đã ủng hộ và giúp đỡ nghiên cứu học thuật này! Nếu có bất kỳ câu hỏi nào về nghiên cứu, vui lòng liên hệ với tôi qua email: s711364105@gm.ntpu.edu.tw",
+        th: "หากคุณรู้จักแรงงานข้ามชาติคนอื่นในไต้หวัน กรุณาแชร์แบบสอบถามนี้ให้พวกเขา ขอบคุณสำหรับการสนับสนุนและความช่วยเหลือต่องานวิจัยทางวิชาการนี้! หากมีคำถามเกี่ยวกับงานวิจัย ติดต่อได้ทางอีเมล: s711364105@gm.ntpu.edu.tw" }
+    ],
+    footer: [
+      { zh: "國立臺北大學", en: "National Taipei University", id: "National Taipei University", vi: "Đại học Quốc gia Đài Bắc (National Taipei University)", th: "มหาวิทยาลัยแห่งชาติไทเป (National Taipei University)" },
+      { zh: "指導教授：Su-syan Jou 博士、Mao-hong Lin 博士", en: "Advisors: Su-syan Jou, Ph.D. and Mao-hong Lin, Ph.D.", id: "Pembimbing: Su-syan Jou, Ph.D. dan Mao-hong Lin, Ph.D.", vi: "Giảng viên hướng dẫn: TS. Su-syan Jou và TS. Mao-hong Lin", th: "อาจารย์ที่ปรึกษา: Su-syan Jou, Ph.D. และ Mao-hong Lin, Ph.D." },
+      { zh: "研究生：蔡逸騏", en: "Graduate Student: Yi-Chi Tsai", id: "Mahasiswa pascasarjana: Yi-Chi Tsai", vi: "Học viên cao học: Yi-Chi Tsai", th: "นักศึกษาปริญญาโท: Yi-Chi Tsai" }
+    ]
+  },
 
-  // 量表選項（可重複使用）
+  // 量表選項（範例量表，之後換成你的正式版本；id / vi / th 由 Claude 草擬）
   scales: {
     agree5: [
-      { value: 1, label: { zh: "非常不同意", en: "Strongly disagree" } },
-      { value: 2, label: { zh: "不同意", en: "Disagree" } },
-      { value: 3, label: { zh: "普通", en: "Neutral" } },
-      { value: 4, label: { zh: "同意", en: "Agree" } },
-      { value: 5, label: { zh: "非常同意", en: "Strongly agree" } }
+      { value: 1, label: { zh: "非常不同意", en: "Strongly disagree", id: "Sangat tidak setuju", vi: "Rất không đồng ý", th: "ไม่เห็นด้วยอย่างยิ่ง" } },
+      { value: 2, label: { zh: "不同意", en: "Disagree", id: "Tidak setuju", vi: "Không đồng ý", th: "ไม่เห็นด้วย" } },
+      { value: 3, label: { zh: "普通", en: "Neutral", id: "Netral", vi: "Trung lập", th: "เฉยๆ" } },
+      { value: 4, label: { zh: "同意", en: "Agree", id: "Setuju", vi: "Đồng ý", th: "เห็นด้วย" } },
+      { value: 5, label: { zh: "非常同意", en: "Strongly agree", id: "Sangat setuju", vi: "Rất đồng ý", th: "เห็นด้วยอย่างยิ่ง" } }
     ],
     likely5: [
-      { value: 1, label: { zh: "非常不可能", en: "Very unlikely" } },
-      { value: 2, label: { zh: "不太可能", en: "Unlikely" } },
-      { value: 3, label: { zh: "不確定", en: "Not sure" } },
-      { value: 4, label: { zh: "有可能", en: "Likely" } },
-      { value: 5, label: { zh: "非常可能", en: "Very likely" } }
+      { value: 1, label: { zh: "非常不可能", en: "Very unlikely", id: "Sangat tidak mungkin", vi: "Rất không có khả năng", th: "ไม่น่าจะเลย" } },
+      { value: 2, label: { zh: "不太可能", en: "Unlikely", id: "Tidak mungkin", vi: "Không có khả năng", th: "ไม่น่าจะ" } },
+      { value: 3, label: { zh: "不確定", en: "Not sure", id: "Tidak yakin", vi: "Không chắc", th: "ไม่แน่ใจ" } },
+      { value: 4, label: { zh: "有可能", en: "Likely", id: "Mungkin", vi: "Có khả năng", th: "น่าจะ" } },
+      { value: 5, label: { zh: "非常可能", en: "Very likely", id: "Sangat mungkin", vi: "Rất có khả năng", th: "น่าจะมาก" } }
     ]
   },
 
   // 題目：每一個 section 是一頁。id 就是試算表的欄位名稱（對照變項代碼表）
-  // type: single（單選）、scale（量表）、number（數字）、text（文字）、info（說明文字，不作答）
+  // type: single（單選）、select（下拉選單）、scale（量表）、number（數字）、text（文字）、info（說明文字）
+  // 選項加 other: true = 選了會出現「請說明」輸入框，內容存在「題號_other」欄位
+  // hint: 題目下方的小字說明；unit: 數字題輸入框後面的單位
   // optional: true = 沒填也不會跳出提醒
-  // showIf: 跳題條件，例如 { item: "D5", in: [1] } = D5 選 1 才顯示
+  // layout: 個別量表題要用不同呈現方式時才寫："buttons" = 直式按鈕；"slider-h" = 橫向拉桿；"slider-v" = 垂直拉桿
+  // showIf: 跳題條件，例如 { item: "D04", in: [1] } = D04 選 1 才顯示
   sections: [
-    { id: "demo", title: { zh: "基本資料", en: "About you" }, items: [
-      { id: "D1", type: "single", label: { zh: "你來自哪一個國家？", en: "Which country are you from?" }, options: [
-        { value: 1, label: { zh: "印尼", en: "Indonesia" } },
-        { value: 2, label: { zh: "越南", en: "Vietnam" } },
-        { value: 3, label: { zh: "菲律賓", en: "Philippines" } },
-        { value: 4, label: { zh: "泰國", en: "Thailand" } },
-        { value: 5, label: { zh: "其他", en: "Other" } } ] },
-      { id: "D2", type: "number", min: 18, max: 80, label: { zh: "你今年幾歲？", en: "How old are you?" } },
-      { id: "D3", type: "number", min: 0, max: 40, label: { zh: "你在台灣工作幾年了？（未滿一年請填 0）", en: "How many years have you worked in Taiwan? (Less than 1 year = 0)" } },
-      { id: "D5", type: "single", label: { zh: "你有台灣的銀行帳戶嗎？", en: "Do you have a bank account in Taiwan?" }, options: [
-        { value: 1, label: { zh: "有", en: "Yes" } },
-        { value: 0, label: { zh: "沒有", en: "No" } } ] },
-      { id: "D6", type: "single", showIf: { item: "D5", in: [1] }, label: { zh: "你的存摺和提款卡平常是誰保管？", en: "Who usually keeps your bankbook and ATM card?" }, options: [
-        { value: 1, label: { zh: "我自己", en: "Myself" } },
-        { value: 2, label: { zh: "雇主", en: "My employer" } },
-        { value: 3, label: { zh: "仲介", en: "My agency" } },
-        { value: 4, label: { zh: "其他人", en: "Someone else" } } ] }
+    // ===== Part A–C（2026-11-24）=====
+    // en = 研究者英文原文＋Claude 草擬的他加祿語；id / vi / th = Claude 草擬（對照表「移工問卷_PartA-C_翻譯對照表.xlsx」），待回譯與母語者審查
+    // Part A：A01–A08 改編自 IFDFW（5 點，1 = 狀況最好、5 = 壓力最大）；A10 只在 A09 = 1 時出現；A11 為金額（貨幣依語言）
+    // Part B：LAVS 12 題（B01–B05 為負向敘述，分析時處理）
+    // Part C：第一輪 Q1、第二輪 Q2，第二輪最後是 C5（1 = True、2 = False、3 = Don't know）；順序固定不隨機
+    {"id":"partA","title":{"en":"Part A / Bahagi A","id":"Bagian A","vi":"Phần A","th":"ส่วน A"},"items":[{"id":"A_intro","type":"info","label":{"en":"**Below are questions about your financial situation and how you feel about it.** Please choose the number from 1 to 5 that is most appropriate for your situation.\n\n**Ang mga sumusunod na tanong ay tungkol sa iyong kalagayang pinansyal at kung ano ang nararamdaman mo tungkol dito.** Pumili ng numero mula 1 hanggang 5 na pinakaangkop sa iyong sitwasyon.","id":"**Berikut adalah pertanyaan tentang kondisi keuangan Anda dan bagaimana perasaan Anda tentang hal itu.** Silakan pilih angka 1 sampai 5 yang paling sesuai dengan situasi Anda.","vi":"**Dưới đây là các câu hỏi về tình hình tài chính của bạn và cảm nhận của bạn về điều đó.** Vui lòng chọn số từ 1 đến 5 phù hợp nhất với tình huống của bạn.","th":"**ต่อไปนี้เป็นคำถามเกี่ยวกับสถานะทางการเงินของคุณ และความรู้สึกของคุณที่มีต่อเรื่องนี้** กรุณาเลือกตัวเลขตั้งแต่ 1 ถึง 5 ที่ตรงกับสถานการณ์ของคุณมากที่สุด"}},{"id":"A01","type":"scale","anchors":{"low":{"en":"No Stress at All / Walang anumang stress","id":"Tidak stres sama sekali","vi":"Hoàn toàn không căng thẳng","th":"ไม่เครียดเลย"},"high":{"en":"Overwhelming Stress / Labis-labis na stress","id":"Stres yang sangat berat","vi":"Căng thẳng tột độ","th":"เครียดมากที่สุด"}},"label":{"en":"What do you feel is the level of your financial stress today? / Gaano kalaki ang pinansyal na stress na nararamdaman mo ngayon?","id":"Seberapa besar tingkat stres keuangan yang Anda rasakan saat ini?","vi":"Bạn cảm thấy mức độ căng thẳng về tài chính của mình hiện nay như thế nào?","th":"ปัจจุบันคุณรู้สึกเครียดเรื่องการเงินในระดับใด"}},{"id":"A02","type":"scale","anchors":{"low":{"en":"Satisfied / Kontento","id":"Puas","vi":"Hài lòng","th":"พอใจ"},"high":{"en":"Dissatisfied / Hindi kontento","id":"Tidak puas","vi":"Không hài lòng","th":"ไม่พอใจ"}},"label":{"en":"How satisfied are you with your present financial situation? / Gaano ka kontento sa iyong kasalukuyang kalagayang pinansyal?","id":"Seberapa puas Anda dengan kondisi keuangan Anda saat ini?","vi":"Bạn hài lòng như thế nào với tình hình tài chính hiện tại của mình?","th":"คุณพึงพอใจกับสถานะทางการเงินในปัจจุบันของคุณมากน้อยเพียงใด"}},{"id":"A03","type":"scale","anchors":{"low":{"en":"Feel Comfortable / Panatag ang loob","id":"Merasa nyaman","vi":"Cảm thấy thoải mái","th":"รู้สึกสบายใจ"},"high":{"en":"Feel Overwhelmed / Labis na nabibigatan","id":"Merasa sangat terbebani","vi":"Cảm thấy quá sức chịu đựng","th":"รู้สึกหนักใจมาก"}},"label":{"en":"How do you feel about your current financial situation? / Ano ang pakiramdam mo tungkol sa iyong kasalukuyang kalagayang pinansyal?","id":"Bagaimana perasaan Anda tentang kondisi keuangan Anda saat ini?","vi":"Bạn cảm thấy thế nào về tình hình tài chính hiện tại của mình?","th":"คุณรู้สึกอย่างไรกับสถานะทางการเงินในปัจจุบันของคุณ"}},{"id":"A04","type":"scale","anchors":{"low":{"en":"Never Worry / Hindi kailanman nag-aalala","id":"Tidak pernah khawatir","vi":"Không bao giờ lo lắng","th":"ไม่เคยกังวล"},"high":{"en":"Worry All the Time / Palaging nag-aalala","id":"Selalu khawatir","vi":"Lúc nào cũng lo lắng","th":"กังวลตลอดเวลา"}},"label":{"en":"How often do you worry about being able to meet normal monthly living expenses? / Gaano kadalas kang nag-aalala kung kakayanin mong bayaran ang karaniwang buwanang gastusin sa pamumuhay?","id":"Seberapa sering Anda khawatir tidak mampu memenuhi biaya hidup bulanan yang biasa?","vi":"Bạn thường lo lắng đến mức nào về việc có đủ tiền chi trả các chi phí sinh hoạt hằng tháng thông thường hay không?","th":"คุณกังวลบ่อยแค่ไหนว่าจะมีเงินไม่พอจ่ายค่าใช้จ่ายในการดำรงชีวิตตามปกติในแต่ละเดือน"}},{"id":"A05","type":"scale","anchors":{"low":{"en":"High Confidence / Lubos na sigurado","id":"Sangat yakin","vi":"Rất tự tin","th":"มั่นใจมาก"},"high":{"en":"No Confidence / Hindi sigurado","id":"Tidak yakin sama sekali","vi":"Không tự tin","th":"ไม่มั่นใจเลย"}},"label":{"en":"How confident are you that you could find the money to pay for a financial emergency that costs about US$ 1,000? / Gaano ka kasigurado na makakahanap ka ng pera para sa isang pinansyal na emergency na nagkakahalaga ng mga US$ 1,000?","id":"Seberapa yakin Anda bisa mendapatkan uang untuk membayar keadaan darurat keuangan yang biayanya sekitar US$ 1.000?","vi":"Bạn tự tin đến mức nào rằng mình có thể xoay được tiền để chi trả cho một tình huống khẩn cấp về tài chính tốn khoảng 1.000 đô la Mỹ?","th":"คุณมั่นใจแค่ไหนว่าจะหาเงินมาจ่ายค่าใช้จ่ายฉุกเฉินที่มีมูลค่าประมาณ 1,000 ดอลลาร์สหรัฐได้"},"hint":{"en":"Note: US$ 1,000 (approx. NT$ 32,000) / Paalala: US$ 1,000 (humigit-kumulang NT$ 32,000)","id":"Catatan: US$ 1.000 (sekitar NT$ 32.000)","vi":"Lưu ý: 1.000 đô la Mỹ (khoảng 32.000 Đài tệ)","th":"หมายเหตุ: 1,000 ดอลลาร์สหรัฐ (ประมาณ 32,000 เหรียญไต้หวัน)"}},{"id":"A06","type":"scale","anchors":{"low":{"en":"Never / Hindi kailanman","id":"Tidak pernah","vi":"Không bao giờ","th":"ไม่เคย"},"high":{"en":"All the Time / Palagi","id":"Selalu","vi":"Lúc nào cũng vậy","th":"ตลอดเวลา"}},"label":{"en":"How often does this happen to you? You want to go out to eat, go to a movie or do something else and don't go because you can't afford to? / Gaano kadalas ito nangyayari sa iyo? Gusto mong kumain sa labas, manood ng sine, o gumawa ng iba pang bagay, pero hindi ka tumutuloy dahil hindi mo kaya ang gastos?","id":"Seberapa sering hal ini terjadi pada Anda? Anda ingin makan di luar, menonton film, atau melakukan hal lain, tetapi tidak jadi pergi karena tidak mampu membayarnya?","vi":"Điều này xảy ra với bạn thường xuyên đến mức nào? Bạn muốn đi ăn ngoài, đi xem phim hoặc làm việc gì đó khác nhưng không đi vì không đủ tiền?","th":"เรื่องนี้เกิดขึ้นกับคุณบ่อยแค่ไหน: คุณอยากออกไปกินข้าวนอกบ้าน ดูหนัง หรือทำอย่างอื่น แต่ไม่ได้ไปเพราะไม่มีเงินพอ"}},{"id":"A07","type":"scale","anchors":{"low":{"en":"Never / Hindi kailanman","id":"Tidak pernah","vi":"Không bao giờ","th":"ไม่เคย"},"high":{"en":"All the Time / Palagi","id":"Selalu","vi":"Lúc nào cũng vậy","th":"ตลอดเวลา"}},"label":{"en":"How frequently do you find yourself just getting by financially and living paycheck to paycheck? / Gaano kadalas mong nararanasan na sapat lang ang pera mo para makaraos, at umaasa ka lang sa susunod na sahod?","id":"Seberapa sering Anda merasa keuangan Anda hanya pas-pasan dan hidup dari gaji ke gaji?","vi":"Bạn thường xuyên đến mức nào thấy mình chỉ xoay xở vừa đủ về tài chính, tháng nào cũng tiêu hết lương rồi chờ lương tháng sau?","th":"คุณพบว่าตัวเองแค่พอเอาตัวรอดทางการเงิน และใช้เงินเดือนชนเดือนบ่อยแค่ไหน"}},{"id":"A08","type":"scale","anchors":{"low":{"en":"No Stress at All / Walang anumang stress","id":"Tidak stres sama sekali","vi":"Hoàn toàn không căng thẳng","th":"ไม่เครียดเลย"},"high":{"en":"Overwhelming Stress / Labis-labis na stress","id":"Stres yang sangat berat","vi":"Căng thẳng tột độ","th":"เครียดมากที่สุด"}},"label":{"en":"How stressed do you feel about your personal finances in general? / Gaano ka ka-stress sa iyong personal na pananalapi sa pangkalahatan?","id":"Secara umum, seberapa stres Anda terhadap keuangan pribadi Anda?","vi":"Nhìn chung, bạn cảm thấy căng thẳng đến mức nào về tài chính cá nhân của mình?","th":"โดยรวมแล้ว คุณรู้สึกเครียดเกี่ยวกับการเงินส่วนตัวมากน้อยเพียงใด"}},{"id":"A09","type":"single","label":{"en":"Does anyone depend on you for financial support? / May umaasa ba sa iyo para sa suportang pinansyal?","id":"Apakah ada orang yang bergantung pada Anda secara finansial?","vi":"Có ai phụ thuộc vào bạn về mặt tài chính không?","th":"มีคนที่ต้องพึ่งพาคุณทางการเงินหรือไม่"},"options":[{"value":1,"label":{"en":"Yes / Mayroon","id":"Ya, ada","vi":"Có","th":"มี"}},{"value":0,"label":{"en":"No / Wala","id":"Tidak ada","vi":"Không","th":"ไม่มี"}}]},{"id":"A10","type":"number","min":1,"max":30,"showIf":{"item":"A09","in":[1]},"label":{"en":"How many people in your home country depend on the money you send? / Ilang tao sa iyong sariling bansa ang umaasa sa perang ipinapadala mo?","id":"Berapa orang di negara asal Anda yang bergantung pada uang yang Anda kirim?","vi":"Có bao nhiêu người ở quê nhà bạn phụ thuộc vào số tiền bạn gửi về?","th":"มีกี่คนในประเทศบ้านเกิดของคุณที่ต้องพึ่งพาเงินที่คุณส่งกลับไป"}},{"id":"A11","type":"money","label":{"en":"How much did you pay in total in your home country to come to work in Taiwan? (Including agency fees, medical checks, training, airfare, etc.) / Magkano ang kabuuang ibinayad mo sa iyong sariling bansa para makapagtrabaho sa Taiwan? (Kasama ang bayad sa ahensya, medical check-up, training, pamasahe sa eroplano, atbp.)","id":"Berapa total biaya yang Anda bayar di negara asal untuk bisa bekerja di Taiwan? (Termasuk biaya agensi, pemeriksaan kesehatan, pelatihan, tiket pesawat, dll.)","vi":"Tổng cộng bạn đã trả bao nhiêu tiền ở quê nhà để được sang Đài Loan làm việc? (Bao gồm phí môi giới, khám sức khỏe, đào tạo, vé máy bay, v.v.)","th":"คุณจ่ายเงินไปทั้งหมดเท่าไรในประเทศบ้านเกิดเพื่อมาทำงานที่ไต้หวัน (รวมค่านายหน้า ค่าตรวจสุขภาพ ค่าฝึกอบรม ค่าตั๋วเครื่องบิน ฯลฯ)"},"hint":{"en":"Note: Please enter the amount in your home country's currency (numbers only). / Paalala: Ilagay ang halaga sa pera ng iyong sariling bansa (numero lamang).","id":"Catatan: Masukkan jumlahnya dalam mata uang negara asal Anda (hanya angka).","vi":"Lưu ý: Vui lòng nhập số tiền theo đơn vị tiền tệ của nước bạn (chỉ nhập số).","th":"หมายเหตุ: กรุณากรอกจำนวนเงินเป็นสกุลเงินของประเทศบ้านเกิดของคุณ (ตัวเลขเท่านั้น)"}},{"id":"A12","type":"single","label":{"en":"Did you borrow money or take out a loan in your home country to come to work in Taiwan? / Nangutang ka ba o kumuha ng loan sa iyong sariling bansa para makapagtrabaho sa Taiwan?","id":"Apakah Anda meminjam uang atau mengambil pinjaman di negara asal untuk bisa bekerja di Taiwan?","vi":"Bạn có vay tiền hoặc vay nợ ở quê nhà để sang Đài Loan làm việc không?","th":"คุณกู้ยืมเงินหรือขอสินเชื่อในประเทศบ้านเกิดเพื่อมาทำงานที่ไต้หวันหรือไม่"},"options":[{"value":1,"label":{"en":"Yes / Oo","id":"Ya","vi":"Có","th":"ใช่"}},{"value":0,"label":{"en":"No / Hindi","id":"Tidak","vi":"Không","th":"ไม่ใช่"}}]}]},
+    {"id":"partB","title":{"en":"Part B / Bahagi B","id":"Bagian B","vi":"Phần B","th":"ส่วน B"},"items":[{"id":"B_intro","type":"info","label":{"en":"**Below are statements about how you might behave in different situations.** There are no right or wrong answers. Please choose the number from 1 to 5 that best describes you.\n\n**Ang mga sumusunod ay mga pahayag tungkol sa kung paano ka maaaring kumilos sa iba't ibang sitwasyon.** Walang tama o maling sagot. Pumili ng numero mula 1 hanggang 5 na pinakanaglalarawan sa iyo.","id":"**Berikut adalah pernyataan tentang bagaimana Anda mungkin bertindak dalam berbagai situasi.** Tidak ada jawaban benar atau salah. Silakan pilih angka 1 sampai 5 yang paling menggambarkan diri Anda.","vi":"**Dưới đây là những nhận định về cách bạn có thể hành xử trong các tình huống khác nhau.** Không có câu trả lời đúng hay sai. Vui lòng chọn số từ 1 đến 5 mô tả đúng nhất về bạn.","th":"**ต่อไปนี้เป็นข้อความเกี่ยวกับการกระทำของคุณในสถานการณ์ต่างๆ** ไม่มีคำตอบที่ถูกหรือผิด กรุณาเลือกตัวเลขตั้งแต่ 1 ถึง 5 ที่อธิบายตัวคุณได้ดีที่สุด"}},{"id":"B01","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"I will do the same if I see someone getting away with breaking regulations. / Gagawin ko rin ito kung makita kong may taong lumalabag sa mga regulasyon nang hindi napaparusahan.","id":"Saya akan melakukan hal yang sama jika melihat seseorang melanggar peraturan tanpa mendapat hukuman.","vi":"Nếu thấy ai đó vi phạm quy định mà không bị xử lý, tôi cũng sẽ làm như vậy.","th":"ถ้าฉันเห็นคนอื่นทำผิดกฎระเบียบแล้วไม่ถูกลงโทษ ฉันก็จะทำแบบเดียวกัน"}},{"id":"B02","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"I cannot guarantee that I will follow the law in cases where the law clashes with significant personal interests. / Hindi ko masisiguro na susunod ako sa batas sa mga pagkakataong sumasalungat ang batas sa malalaking personal kong interes.","id":"Saya tidak bisa menjamin akan mematuhi hukum jika hukum bertentangan dengan kepentingan pribadi saya yang penting.","vi":"Tôi không thể đảm bảo sẽ tuân thủ pháp luật trong những trường hợp pháp luật mâu thuẫn với lợi ích cá nhân quan trọng của tôi.","th":"ฉันไม่สามารถรับประกันได้ว่าจะปฏิบัติตามกฎหมาย ในกรณีที่กฎหมายขัดกับผลประโยชน์ส่วนตัวที่สำคัญของฉัน"}},{"id":"B03","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"I may take advantage of legal loopholes if I see a chance to make profit. / Maaari kong samantalahin ang mga butas sa batas kung may makita akong pagkakataong kumita.","id":"Saya mungkin akan memanfaatkan celah hukum jika melihat kesempatan untuk mendapatkan keuntungan.","vi":"Tôi có thể lợi dụng kẽ hở của pháp luật nếu thấy có cơ hội kiếm lời.","th":"ฉันอาจใช้ประโยชน์จากช่องโหว่ของกฎหมาย ถ้าเห็นโอกาสที่จะได้กำไร"}},{"id":"B04","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"It would be hard for me to resist the temptation if someone offers me money to do something illegal. / Mahihirapan akong labanan ang tukso kung may mag-alok sa akin ng pera para gumawa ng ilegal.","id":"Akan sulit bagi saya untuk menolak godaan jika seseorang menawarkan uang kepada saya untuk melakukan sesuatu yang ilegal.","vi":"Tôi sẽ khó cưỡng lại cám dỗ nếu có người trả tiền để tôi làm điều phạm pháp.","th":"ถ้ามีคนเสนอเงินให้ฉันทำสิ่งที่ผิดกฎหมาย ฉันคงอดใจต่อสิ่งยั่วยุได้ยาก"}},{"id":"B05","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"Resisting temptation is so struggling that I cannot promise not to break the law when faced with significant temptations. / Napakahirap labanan ang tukso kaya hindi ko maipapangako na hindi ako lalabag sa batas kapag nahaharap sa malalaking tukso.","id":"Menahan godaan begitu sulit sehingga saya tidak bisa berjanji untuk tidak melanggar hukum ketika menghadapi godaan yang besar.","vi":"Cưỡng lại cám dỗ khó khăn đến mức tôi không thể hứa sẽ không vi phạm pháp luật khi đối mặt với những cám dỗ lớn.","th":"การต้านทานสิ่งยั่วยุเป็นเรื่องยากมาก จนฉันไม่อาจสัญญาได้ว่าจะไม่ทำผิดกฎหมายเมื่อเจอสิ่งยั่วยุที่มาก"}},{"id":"B06","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"I will reflect on my own problems and make sure not to commit such transgressions again if I was once punished for violating legal norms. / Kung minsan na akong naparusahan dahil sa paglabag sa batas, pagninilayan ko ang sarili kong mga pagkakamali at sisiguraduhin kong hindi ko na uulitin ang ganoong paglabag.","id":"Jika saya pernah dihukum karena melanggar norma hukum, saya akan merenungkan kesalahan saya sendiri dan memastikan tidak mengulangi pelanggaran seperti itu lagi.","vi":"Nếu từng bị xử phạt vì vi phạm pháp luật, tôi sẽ tự nhìn lại lỗi của mình và bảo đảm không tái phạm những vi phạm như vậy nữa.","th":"ถ้าฉันเคยถูกลงโทษเพราะทำผิดกฎหมาย ฉันจะทบทวนข้อผิดพลาดของตัวเอง และจะไม่ทำผิดแบบนั้นซ้ำอีก"}},{"id":"B07","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"I will still make sure to comply with traffic regulations in the absence of surveillance. / Sisiguraduhin ko pa ring sumunod sa mga batas trapiko kahit walang nagbabantay.","id":"Saya tetap akan mematuhi peraturan lalu lintas meskipun tidak ada pengawasan.","vi":"Tôi vẫn sẽ tuân thủ luật giao thông ngay cả khi không có ai giám sát.","th":"ฉันจะยังคงปฏิบัติตามกฎจราจร แม้ไม่มีใครคอยตรวจหรือเฝ้าดู"}},{"id":"B08","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"I will turn myself in right away despite the possibility of violating criminal law if I unintentionally harm someone. / Kung hindi ko sinasadyang makasakit ng tao, agad kong isusuko ang aking sarili kahit posibleng nakalabag ako sa batas kriminal.","id":"Jika saya tanpa sengaja mencelakai seseorang, saya akan segera menyerahkan diri meskipun mungkin saya melanggar hukum pidana.","vi":"Nếu vô tình gây thương tích cho người khác, tôi sẽ ra tự thú ngay dù có thể đã vi phạm luật hình sự.","th":"ถ้าฉันทำให้ผู้อื่นบาดเจ็บโดยไม่ได้ตั้งใจ ฉันจะเข้ามอบตัวทันที แม้อาจเป็นความผิดทางอาญา"}},{"id":"B09","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"I will choose to report it to the police right away if I witness someone being violated. / Kung makakita ako ng taong nabibiktima, pipiliin kong agad itong i-report sa pulis.","id":"Jika saya melihat seseorang menjadi korban, saya akan memilih untuk segera melaporkannya ke polisi.","vi":"Nếu chứng kiến ai đó bị xâm hại, tôi sẽ chọn báo ngay cho cảnh sát.","th":"ถ้าฉันเห็นใครถูกทำร้ายหรือตกเป็นเหยื่อ ฉันจะเลือกแจ้งตำรวจทันที"}},{"id":"B10","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"I will comply with tax laws despite a tight budget. / Susunod ako sa mga batas sa buwis kahit gipit ang aking budget.","id":"Saya akan mematuhi peraturan pajak meskipun keuangan saya sedang sulit.","vi":"Tôi sẽ tuân thủ luật thuế dù đang eo hẹp về tài chính.","th":"ฉันจะปฏิบัติตามกฎหมายภาษี แม้จะมีเงินไม่ค่อยพอใช้"}},{"id":"B11","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"I will compensate others in spite of difficulties if I cause losses to them by violating their rights. / Kung makapagdulot ako ng pagkalugi sa iba dahil sa paglabag ko sa kanilang mga karapatan, babayaran ko sila kahit mahirap.","id":"Jika saya menyebabkan kerugian bagi orang lain karena melanggar hak mereka, saya akan memberi ganti rugi meskipun sulit.","vi":"Nếu tôi xâm phạm quyền lợi của người khác và gây thiệt hại cho họ, tôi sẽ bồi thường dù gặp khó khăn.","th":"ถ้าฉันทำให้ผู้อื่นเสียหายเพราะละเมิดสิทธิของเขา ฉันจะชดใช้ให้แม้จะลำบาก"}},{"id":"B12","type":"scale","anchors":{"low":{"en":"Not at All / Hindi talaga","id":"Sama sekali tidak","vi":"Hoàn toàn không đúng","th":"ไม่ตรงเลย"},"high":{"en":"Completely / Lubos","id":"Sepenuhnya","vi":"Hoàn toàn đúng","th":"ตรงทั้งหมด"}},"label":{"en":"When I owe someone money, I will not default; I will strive to repay them even if I'm facing financial difficulties. / Kapag may utang ako sa isang tao, hindi ako tatakas sa pagbabayad; sisikapin kong bayaran siya kahit nahihirapan ako sa pera.","id":"Ketika saya berutang kepada seseorang, saya tidak akan mangkir; saya akan berusaha melunasinya meskipun sedang mengalami kesulitan keuangan.","vi":"Khi nợ tiền ai đó, tôi sẽ không quỵt nợ; tôi sẽ cố gắng trả dù đang gặp khó khăn về tài chính.","th":"เมื่อฉันเป็นหนี้ใคร ฉันจะไม่เบี้ยวหนี้ และจะพยายามชดใช้ให้ แม้จะมีปัญหาทางการเงินก็ตาม"}}]},
+    {"id":"partC1","title":{"en":"Part C / Bahagi C","id":"Bagian C","vi":"Phần C","th":"ส่วน C"},"items":[{"id":"C_intro","type":"info","label":{"en":"**Below are some situations you might face.** Please imagine that these happen to you and choose the answer that is closest to what you think. This survey is anonymous, and there are no right or wrong answers.\n\n**Narito ang ilang sitwasyon na maaari mong maranasan.** Isipin mong nangyayari ito sa iyo at piliin ang sagot na pinakamalapit sa iniisip mo. Anonymous ang survey na ito, at walang tama o maling sagot.","id":"**Berikut adalah beberapa situasi yang mungkin Anda hadapi.** Bayangkan hal-hal ini terjadi pada Anda, lalu pilih jawaban yang paling mendekati pendapat Anda. Survei ini bersifat anonim, dan tidak ada jawaban benar atau salah.","vi":"**Dưới đây là một số tình huống bạn có thể gặp.** Hãy tưởng tượng những điều này xảy ra với bạn và chọn câu trả lời gần nhất với suy nghĩ của bạn. Khảo sát này là ẩn danh, và không có câu trả lời đúng hay sai.","th":"**ต่อไปนี้เป็นสถานการณ์ที่คุณอาจพบเจอ** กรุณาจินตนาการว่าเรื่องเหล่านี้เกิดขึ้นกับคุณ แล้วเลือกคำตอบที่ใกล้เคียงกับความคิดของคุณมากที่สุด แบบสอบถามนี้ไม่ระบุตัวตน และไม่มีคำตอบที่ถูกหรือผิด"}},{"id":"C1_Q1","type":"scale","context":{"en":"**Situation 1 / Sitwasyon 1**\nOn Facebook, you see a post from someone who wants to buy bank accounts. They will pay you NT$9,000 for your ATM card and PIN. You would meet at a convenience store to make the exchange.\n\nSa Facebook, may nakita kang post ng isang taong gustong bumili ng mga bank account. Babayaran ka niya ng NT$9,000 kapalit ng iyong ATM card at PIN. Magkikita kayo sa isang convenience store para sa palitan.","id":"**Situasi 1**\nDi Facebook, Anda melihat unggahan dari seseorang yang ingin membeli rekening bank. Ia akan membayar Anda NT$9.000 untuk kartu ATM dan PIN Anda. Kalian akan bertemu di minimarket untuk melakukan pertukaran.","vi":"**Tình huống 1**\nTrên Facebook, bạn thấy bài đăng của một người muốn mua tài khoản ngân hàng. Họ sẽ trả bạn 9.000 Đài tệ để lấy thẻ ATM và mã PIN của bạn. Hai bên sẽ gặp nhau ở cửa hàng tiện lợi để trao đổi.","th":"**สถานการณ์ที่ 1**\nบน Facebook คุณเห็นโพสต์ของคนที่ต้องการซื้อบัญชีธนาคาร เขาจะจ่ายเงินให้คุณ 9,000 เหรียญไต้หวัน แลกกับบัตร ATM และรหัส PIN ของคุณ โดยจะนัดเจอกันที่ร้านสะดวกซื้อเพื่อแลกเปลี่ยน"},"anchors":{"low":{"en":"Definitely would not / Siguradong hindi","id":"Pasti tidak akan","vi":"Chắc chắn không đưa","th":"ไม่ให้แน่นอน"},"high":{"en":"Definitely would / Siguradong oo","id":"Pasti akan","vi":"Chắc chắn sẽ đưa","th":"ให้แน่นอน"}},"label":{"en":"Would you give your ATM card and PIN to this person? / Ibibigay mo ba ang iyong ATM card at PIN sa taong ito?","id":"Apakah Anda akan memberikan kartu ATM dan PIN Anda kepada orang ini?","vi":"Bạn có đưa thẻ ATM và mã PIN của mình cho người này không?","th":"คุณจะให้บัตร ATM และรหัส PIN ของคุณกับคนนี้หรือไม่"}},{"id":"C2_Q1","type":"scale","context":{"en":"**Situation 2 / Sitwasyon 2**\nYou need money urgently. On Facebook, you see an ad offering “loans for foreign workers.” The person says they can lend you NT$10,000, but you must first give them your ATM card and PIN as a guarantee.\n\nKailangan mo agad ng pera. Sa Facebook, may nakita kang ad na nag-aalok ng “loan para sa mga foreign worker.” Sabi ng tao, mapapahiram ka niya ng NT$10,000, pero kailangan mo munang ibigay sa kanya ang iyong ATM card at PIN bilang garantiya.","id":"**Situasi 2**\nAnda sedang sangat membutuhkan uang. Di Facebook, Anda melihat iklan yang menawarkan “pinjaman untuk pekerja asing”. Orang itu berkata ia bisa meminjamkan NT$10.000 kepada Anda, tetapi Anda harus terlebih dahulu menyerahkan kartu ATM dan PIN Anda sebagai jaminan.","vi":"**Tình huống 2**\nBạn đang cần tiền gấp. Trên Facebook, bạn thấy một quảng cáo “cho lao động nước ngoài vay tiền”. Người đó nói có thể cho bạn vay 10.000 Đài tệ, nhưng bạn phải đưa trước thẻ ATM và mã PIN của mình để làm tin.","th":"**สถานการณ์ที่ 2**\nคุณต้องการเงินด่วน บน Facebook คุณเห็นโฆษณา “เงินกู้สำหรับแรงงานต่างชาติ” คนนั้นบอกว่าจะให้คุณกู้ 10,000 เหรียญไต้หวันได้ แต่คุณต้องให้บัตร ATM และรหัส PIN ของคุณไว้ก่อนเป็นหลักประกัน"},"anchors":{"low":{"en":"Definitely would not / Siguradong hindi","id":"Pasti tidak akan","vi":"Chắc chắn không đưa","th":"ไม่ให้แน่นอน"},"high":{"en":"Definitely would / Siguradong oo","id":"Pasti akan","vi":"Chắc chắn sẽ đưa","th":"ให้แน่นอน"}},"label":{"en":"Would you give your ATM card and PIN to this person? / Ibibigay mo ba ang iyong ATM card at PIN sa taong ito?","id":"Apakah Anda akan memberikan kartu ATM dan PIN Anda kepada orang ini?","vi":"Bạn có đưa thẻ ATM và mã PIN của mình cho người này không?","th":"คุณจะให้บัตร ATM และรหัส PIN ของคุณกับคนนี้หรือไม่"}},{"id":"C3_Q1","type":"scale","context":{"en":"**Situation 3 / Sitwasyon 3**\nA friend from your home country has known you for many years, says his bank account cannot be used. His sister wants to send him money from home, so he asks to borrow your ATM card and PIN. He will give them back after he takes out the money.\n\nIsang kaibigan mula sa iyong bansa na matagal mo nang kilala ang nagsabing hindi magamit ang kanyang bank account. Gustong padalhan siya ng pera ng kanyang kapatid na babae mula sa inyong bayan, kaya hinihiram niya ang iyong ATM card at PIN. Ibabalik niya ang mga ito pagkatapos niyang makuha ang pera.","id":"**Situasi 3**\nSeorang teman dari negara asal Anda yang sudah Anda kenal bertahun-tahun mengatakan bahwa rekening banknya tidak bisa digunakan. Saudara perempuannya ingin mengirim uang dari kampung halaman, jadi ia meminta untuk meminjam kartu ATM dan PIN Anda. Ia akan mengembalikannya setelah mengambil uangnya.","vi":"**Tình huống 3**\nMột người bạn đồng hương quen biết bạn nhiều năm nói rằng tài khoản ngân hàng của anh ấy không dùng được. Chị gái hoặc em gái của anh ấy muốn gửi tiền từ quê sang, nên anh ấy hỏi mượn thẻ ATM và mã PIN của bạn. Anh ấy sẽ trả lại sau khi rút tiền.","th":"**สถานการณ์ที่ 3**\nเพื่อนจากประเทศบ้านเกิดเดียวกันที่รู้จักกับคุณมาหลายปีบอกว่าบัญชีธนาคารของเขาใช้ไม่ได้ พี่สาวหรือน้องสาวของเขาอยากโอนเงินมาจากบ้าน เขาจึงขอยืมบัตร ATM และรหัส PIN ของคุณ และจะคืนให้หลังจากถอนเงินแล้ว"},"anchors":{"low":{"en":"Definitely would not / Siguradong hindi","id":"Pasti tidak akan","vi":"Chắc chắn không đưa","th":"ไม่ให้แน่นอน"},"high":{"en":"Definitely would / Siguradong oo","id":"Pasti akan","vi":"Chắc chắn sẽ đưa","th":"ให้แน่นอน"}},"label":{"en":"Would you give your ATM card and PIN to your friend? / Ibibigay mo ba ang iyong ATM card at PIN sa iyong kaibigan?","id":"Apakah Anda akan memberikan kartu ATM dan PIN Anda kepada teman Anda?","vi":"Bạn có đưa thẻ ATM và mã PIN của mình cho người bạn này không?","th":"คุณจะให้บัตร ATM และรหัส PIN ของคุณกับเพื่อนคนนี้หรือไม่"}},{"id":"C4_Q1","type":"scale","context":{"en":"**Situation 4 / Sitwasyon 4**\nSomeone from your home country left his job and now cannot use his bank account. He says his new boss wants to pay his salary. He asks to borrow your ATM card and PIN and will give them back after he takes out the money.\n\nIsang kababayan mo ang umalis sa kanyang trabaho at ngayon ay hindi na magamit ang kanyang bank account. Sabi niya, gusto ng kanyang bagong amo na ibigay ang kanyang sahod. Hinihiram niya ang iyong ATM card at PIN, at ibabalik niya ang mga ito pagkatapos niyang makuha ang pera.","id":"**Situasi 4**\nSeseorang dari negara asal Anda telah meninggalkan pekerjaannya dan sekarang tidak bisa menggunakan rekening banknya. Ia berkata bos barunya ingin membayar gajinya. Ia meminta untuk meminjam kartu ATM dan PIN Anda dan akan mengembalikannya setelah mengambil uangnya.","vi":"**Tình huống 4**\nMột người đồng hương đã bỏ việc và hiện không thể dùng tài khoản ngân hàng của mình. Anh ấy nói ông chủ mới muốn trả lương cho anh ấy. Anh ấy hỏi mượn thẻ ATM và mã PIN của bạn và sẽ trả lại sau khi rút tiền.","th":"**สถานการณ์ที่ 4**\nคนจากประเทศบ้านเกิดเดียวกับคุณคนหนึ่งออกจากงานไปแล้ว และตอนนี้ใช้บัญชีธนาคารของตัวเองไม่ได้ เขาบอกว่านายจ้างคนใหม่ต้องการจ่ายเงินเดือนให้เขา เขาจึงขอยืมบัตร ATM และรหัส PIN ของคุณ และจะคืนให้หลังจากถอนเงินแล้ว"},"anchors":{"low":{"en":"Definitely would not / Siguradong hindi","id":"Pasti tidak akan","vi":"Chắc chắn không đưa","th":"ไม่ให้แน่นอน"},"high":{"en":"Definitely would / Siguradong oo","id":"Pasti akan","vi":"Chắc chắn sẽ đưa","th":"ให้แน่นอน"}},"label":{"en":"Would you give your ATM card and PIN to this person? / Ibibigay mo ba ang iyong ATM card at PIN sa taong ito?","id":"Apakah Anda akan memberikan kartu ATM dan PIN Anda kepada orang ini?","vi":"Bạn có đưa thẻ ATM và mã PIN của mình cho người này không?","th":"คุณจะให้บัตร ATM และรหัส PIN ของคุณกับคนนี้หรือไม่"}}]},
+    {"id":"partC2","title":{"en":"Part C / Bahagi C","id":"Bagian C","vi":"Phần C","th":"ส่วน C"},"items":[{"id":"C_intro2","type":"info","label":{"en":"**Here are the same situations again.** This time, please answer a different question.\n\n**Narito muli ang parehong mga sitwasyon.** Sa pagkakataong ito, sagutin ang ibang tanong.","id":"**Berikut adalah situasi yang sama sekali lagi.** Kali ini, silakan jawab pertanyaan yang berbeda.","vi":"**Dưới đây là các tình huống giống như trước.** Lần này, vui lòng trả lời một câu hỏi khác.","th":"**ต่อไปนี้เป็นสถานการณ์เดิมอีกครั้ง** ครั้งนี้กรุณาตอบคำถามอีกข้อหนึ่ง"}},{"id":"C1_Q2","type":"scale","context":{"en":"**Situation 1 / Sitwasyon 1**\nOn Facebook, you see a post from someone who wants to buy bank accounts. They will pay you NT$9,000 for your ATM card and PIN. You would meet at a convenience store to make the exchange.\n\nSa Facebook, may nakita kang post ng isang taong gustong bumili ng mga bank account. Babayaran ka niya ng NT$9,000 kapalit ng iyong ATM card at PIN. Magkikita kayo sa isang convenience store para sa palitan.","id":"**Situasi 1**\nDi Facebook, Anda melihat unggahan dari seseorang yang ingin membeli rekening bank. Ia akan membayar Anda NT$9.000 untuk kartu ATM dan PIN Anda. Kalian akan bertemu di minimarket untuk melakukan pertukaran.","vi":"**Tình huống 1**\nTrên Facebook, bạn thấy bài đăng của một người muốn mua tài khoản ngân hàng. Họ sẽ trả bạn 9.000 Đài tệ để lấy thẻ ATM và mã PIN của bạn. Hai bên sẽ gặp nhau ở cửa hàng tiện lợi để trao đổi.","th":"**สถานการณ์ที่ 1**\nบน Facebook คุณเห็นโพสต์ของคนที่ต้องการซื้อบัญชีธนาคาร เขาจะจ่ายเงินให้คุณ 9,000 เหรียญไต้หวัน แลกกับบัตร ATM และรหัส PIN ของคุณ โดยจะนัดเจอกันที่ร้านสะดวกซื้อเพื่อแลกเปลี่ยน"},"anchors":{"low":{"en":"Very unlikely / Napakaliit ng posibilidad","id":"Sangat tidak mungkin","vi":"Rất khó xảy ra","th":"เป็นไปได้น้อยมาก"},"high":{"en":"Very likely / Napakalaki ng posibilidad","id":"Sangat mungkin","vi":"Rất có khả năng","th":"เป็นไปได้มาก"}},"label":{"en":"How likely is it that your account would be used to scam people if you did this? / Gaano kalamang na gagamitin ang iyong account para manloko ng ibang tao kung gagawin mo ito?","id":"Jika Anda melakukan ini, seberapa besar kemungkinan rekening Anda akan digunakan untuk menipu orang?","vi":"Nếu bạn làm vậy, khả năng tài khoản của bạn bị dùng để lừa đảo người khác là bao nhiêu?","th":"ถ้าคุณทำแบบนี้ บัญชีของคุณมีโอกาสถูกนำไปใช้หลอกลวงผู้อื่นมากน้อยเพียงใด"}},{"id":"C2_Q2","type":"scale","context":{"en":"**Situation 2 / Sitwasyon 2**\nYou need money urgently. On Facebook, you see an ad offering “loans for foreign workers.” The person says they can lend you NT$10,000, but you must first give them your ATM card and PIN as a guarantee.\n\nKailangan mo agad ng pera. Sa Facebook, may nakita kang ad na nag-aalok ng “loan para sa mga foreign worker.” Sabi ng tao, mapapahiram ka niya ng NT$10,000, pero kailangan mo munang ibigay sa kanya ang iyong ATM card at PIN bilang garantiya.","id":"**Situasi 2**\nAnda sedang sangat membutuhkan uang. Di Facebook, Anda melihat iklan yang menawarkan “pinjaman untuk pekerja asing”. Orang itu berkata ia bisa meminjamkan NT$10.000 kepada Anda, tetapi Anda harus terlebih dahulu menyerahkan kartu ATM dan PIN Anda sebagai jaminan.","vi":"**Tình huống 2**\nBạn đang cần tiền gấp. Trên Facebook, bạn thấy một quảng cáo “cho lao động nước ngoài vay tiền”. Người đó nói có thể cho bạn vay 10.000 Đài tệ, nhưng bạn phải đưa trước thẻ ATM và mã PIN của mình để làm tin.","th":"**สถานการณ์ที่ 2**\nคุณต้องการเงินด่วน บน Facebook คุณเห็นโฆษณา “เงินกู้สำหรับแรงงานต่างชาติ” คนนั้นบอกว่าจะให้คุณกู้ 10,000 เหรียญไต้หวันได้ แต่คุณต้องให้บัตร ATM และรหัส PIN ของคุณไว้ก่อนเป็นหลักประกัน"},"anchors":{"low":{"en":"Very unlikely / Napakaliit ng posibilidad","id":"Sangat tidak mungkin","vi":"Rất khó xảy ra","th":"เป็นไปได้น้อยมาก"},"high":{"en":"Very likely / Napakalaki ng posibilidad","id":"Sangat mungkin","vi":"Rất có khả năng","th":"เป็นไปได้มาก"}},"label":{"en":"How likely is it that your account would be used to scam people if you did this? / Gaano kalamang na gagamitin ang iyong account para manloko ng ibang tao kung gagawin mo ito?","id":"Jika Anda melakukan ini, seberapa besar kemungkinan rekening Anda akan digunakan untuk menipu orang?","vi":"Nếu bạn làm vậy, khả năng tài khoản của bạn bị dùng để lừa đảo người khác là bao nhiêu?","th":"ถ้าคุณทำแบบนี้ บัญชีของคุณมีโอกาสถูกนำไปใช้หลอกลวงผู้อื่นมากน้อยเพียงใด"}},{"id":"C3_Q2","type":"scale","context":{"en":"**Situation 3 / Sitwasyon 3**\nA friend from your home country has known you for many years, says his bank account cannot be used. His sister wants to send him money from home, so he asks to borrow your ATM card and PIN. He will give them back after he takes out the money.\n\nIsang kaibigan mula sa iyong bansa na matagal mo nang kilala ang nagsabing hindi magamit ang kanyang bank account. Gustong padalhan siya ng pera ng kanyang kapatid na babae mula sa inyong bayan, kaya hinihiram niya ang iyong ATM card at PIN. Ibabalik niya ang mga ito pagkatapos niyang makuha ang pera.","id":"**Situasi 3**\nSeorang teman dari negara asal Anda yang sudah Anda kenal bertahun-tahun mengatakan bahwa rekening banknya tidak bisa digunakan. Saudara perempuannya ingin mengirim uang dari kampung halaman, jadi ia meminta untuk meminjam kartu ATM dan PIN Anda. Ia akan mengembalikannya setelah mengambil uangnya.","vi":"**Tình huống 3**\nMột người bạn đồng hương quen biết bạn nhiều năm nói rằng tài khoản ngân hàng của anh ấy không dùng được. Chị gái hoặc em gái của anh ấy muốn gửi tiền từ quê sang, nên anh ấy hỏi mượn thẻ ATM và mã PIN của bạn. Anh ấy sẽ trả lại sau khi rút tiền.","th":"**สถานการณ์ที่ 3**\nเพื่อนจากประเทศบ้านเกิดเดียวกันที่รู้จักกับคุณมาหลายปีบอกว่าบัญชีธนาคารของเขาใช้ไม่ได้ พี่สาวหรือน้องสาวของเขาอยากโอนเงินมาจากบ้าน เขาจึงขอยืมบัตร ATM และรหัส PIN ของคุณ และจะคืนให้หลังจากถอนเงินแล้ว"},"anchors":{"low":{"en":"Very unlikely / Napakaliit ng posibilidad","id":"Sangat tidak mungkin","vi":"Rất khó xảy ra","th":"เป็นไปได้น้อยมาก"},"high":{"en":"Very likely / Napakalaki ng posibilidad","id":"Sangat mungkin","vi":"Rất có khả năng","th":"เป็นไปได้มาก"}},"label":{"en":"How likely is it that your account would be used to scam people if you did this? / Gaano kalamang na gagamitin ang iyong account para manloko ng ibang tao kung gagawin mo ito?","id":"Jika Anda melakukan ini, seberapa besar kemungkinan rekening Anda akan digunakan untuk menipu orang?","vi":"Nếu bạn làm vậy, khả năng tài khoản của bạn bị dùng để lừa đảo người khác là bao nhiêu?","th":"ถ้าคุณทำแบบนี้ บัญชีของคุณมีโอกาสถูกนำไปใช้หลอกลวงผู้อื่นมากน้อยเพียงใด"}},{"id":"C4_Q2","type":"scale","context":{"en":"**Situation 4 / Sitwasyon 4**\nSomeone from your home country left his job and now cannot use his bank account. He says his new boss wants to pay his salary. He asks to borrow your ATM card and PIN and will give them back after he takes out the money.\n\nIsang kababayan mo ang umalis sa kanyang trabaho at ngayon ay hindi na magamit ang kanyang bank account. Sabi niya, gusto ng kanyang bagong amo na ibigay ang kanyang sahod. Hinihiram niya ang iyong ATM card at PIN, at ibabalik niya ang mga ito pagkatapos niyang makuha ang pera.","id":"**Situasi 4**\nSeseorang dari negara asal Anda telah meninggalkan pekerjaannya dan sekarang tidak bisa menggunakan rekening banknya. Ia berkata bos barunya ingin membayar gajinya. Ia meminta untuk meminjam kartu ATM dan PIN Anda dan akan mengembalikannya setelah mengambil uangnya.","vi":"**Tình huống 4**\nMột người đồng hương đã bỏ việc và hiện không thể dùng tài khoản ngân hàng của mình. Anh ấy nói ông chủ mới muốn trả lương cho anh ấy. Anh ấy hỏi mượn thẻ ATM và mã PIN của bạn và sẽ trả lại sau khi rút tiền.","th":"**สถานการณ์ที่ 4**\nคนจากประเทศบ้านเกิดเดียวกับคุณคนหนึ่งออกจากงานไปแล้ว และตอนนี้ใช้บัญชีธนาคารของตัวเองไม่ได้ เขาบอกว่านายจ้างคนใหม่ต้องการจ่ายเงินเดือนให้เขา เขาจึงขอยืมบัตร ATM และรหัส PIN ของคุณ และจะคืนให้หลังจากถอนเงินแล้ว"},"anchors":{"low":{"en":"Very unlikely / Napakaliit ng posibilidad","id":"Sangat tidak mungkin","vi":"Rất khó xảy ra","th":"เป็นไปได้น้อยมาก"},"high":{"en":"Very likely / Napakalaki ng posibilidad","id":"Sangat mungkin","vi":"Rất có khả năng","th":"เป็นไปได้มาก"}},"label":{"en":"How likely is it that your account would be used to scam people if you did this? / Gaano kalamang na gagamitin ang iyong account para manloko ng ibang tao kung gagawin mo ito?","id":"Jika Anda melakukan ini, seberapa besar kemungkinan rekening Anda akan digunakan untuk menipu orang?","vi":"Nếu bạn làm vậy, khả năng tài khoản của bạn bị dùng để lừa đảo người khác là bao nhiêu?","th":"ถ้าคุณทำแบบนี้ บัญชีของคุณมีโอกาสถูกนำไปใช้หลอกลวงผู้อื่นมากน้อยเพียงใด"}},{"id":"C5","type":"single","label":{"en":"In Taiwan, giving your bank account (e.g., ATM card and PIN) to someone else to use may be illegal, even if you receive nothing in return. / Sa Taiwan, ang pagbibigay ng iyong bank account (halimbawa, ATM card at PIN) sa ibang tao para gamitin nila ay maaaring ilegal, kahit wala kang natatanggap na kapalit.","id":"Di Taiwan, memberikan rekening bank Anda (misalnya kartu ATM dan PIN) kepada orang lain untuk digunakan bisa jadi melanggar hukum, meskipun Anda tidak menerima imbalan apa pun.","vi":"Ở Đài Loan, việc đưa tài khoản ngân hàng của bạn (ví dụ: thẻ ATM và mã PIN) cho người khác sử dụng có thể là vi phạm pháp luật, ngay cả khi bạn không nhận được gì.","th":"ในไต้หวัน การให้ผู้อื่นใช้บัญชีธนาคารของคุณ (เช่น บัตร ATM และรหัส PIN) อาจผิดกฎหมาย แม้คุณจะไม่ได้รับสิ่งตอบแทนใดๆ"},"options":[{"value":1,"label":{"en":"True / Tama","id":"Benar","vi":"Đúng","th":"จริง"}},{"value":2,"label":{"en":"False / Mali","id":"Salah","vi":"Sai","th":"ไม่จริง"}},{"value":3,"label":{"en":"Don't know / Hindi ko alam","id":"Tidak tahu","vi":"Không biết","th":"ไม่ทราบ"}}]}]},
+    { id: "demo", title: { zh: "基本資料", en: "About you / Tungkol sa iyo", id: "Tentang Anda", vi: "Thông tin về bạn", th: "ข้อมูลเกี่ยวกับคุณ" }, items: [
+      { id: "D01", type: "single", label: { zh: "請問您的性別是？", en: "What is your gender? / Ano ang iyong kasarian?", id: "Apa jenis kelamin Anda?", vi: "Giới tính của bạn là gì?", th: "เพศของคุณคืออะไร" }, options: [
+        { value: 1, label: { zh: "男", en: "Male / Lalaki", id: "Laki-laki", vi: "Nam", th: "ชาย" } },
+        { value: 2, label: { zh: "女", en: "Female / Babae", id: "Perempuan", vi: "Nữ", th: "หญิง" } } ] },
+
+      { id: "D02", type: "number", min: 18, max: 80,
+        label: { zh: "請問您幾歲？（請填數字）", en: "How old are you? / Ilang taon ka na?", id: "Berapa usia Anda? (isi dengan angka)", vi: "Bạn bao nhiêu tuổi? (vui lòng điền số)", th: "คุณอายุเท่าไร (กรุณากรอกเป็นตัวเลข)" },
+        unit: { zh: "歲", en: "years old / taong gulang", id: "tahun", vi: "tuổi", th: "ปี" } },
+
+      // 年齡區間：兩種題目寫法（試用中，之後擇一保留）
+      { id: "D02A", type: "single", label: { zh: "請問您幾歲？", en: "How old are you? / Ilang taon ka na?", id: "Berapa usia Anda?", vi: "Bạn bao nhiêu tuổi?", th: "คุณอายุเท่าไร" }, options: [
+        { value: 1, label: { zh: "24歲（含）以下", en: "24 or younger / 24 taong gulang pababa", id: "24 tahun ke bawah", vi: "Từ 24 tuổi trở xuống", th: "ไม่เกิน 24 ปี" } },
+        { value: 2, label: { zh: "25–29歲", en: "25–29 / 25–29 taong gulang", id: "25–29 tahun", vi: "25–29 tuổi", th: "25–29 ปี" } },
+        { value: 3, label: { zh: "30–34歲", en: "30–34 / 30–34 taong gulang", id: "30–34 tahun", vi: "30–34 tuổi", th: "30–34 ปี" } },
+        { value: 4, label: { zh: "35–39歲", en: "35–39 / 35–39 taong gulang", id: "35–39 tahun", vi: "35–39 tuổi", th: "35–39 ปี" } },
+        { value: 5, label: { zh: "40歲（含）以上", en: "40 or older / 40 taong gulang pataas", id: "40 tahun ke atas", vi: "Từ 40 tuổi trở lên", th: "40 ปีขึ้นไป" } } ] },
+
+      { id: "D02B", type: "single", label: { zh: "年齡", en: "Age / Edad", id: "Usia", vi: "Tuổi", th: "อายุ" }, options: [
+        { value: 1, label: { zh: "24歲（含）以下", en: "24 or younger / 24 taong gulang pababa", id: "24 tahun ke bawah", vi: "Từ 24 tuổi trở xuống", th: "ไม่เกิน 24 ปี" } },
+        { value: 2, label: { zh: "25–29歲", en: "25–29 / 25–29 taong gulang", id: "25–29 tahun", vi: "25–29 tuổi", th: "25–29 ปี" } },
+        { value: 3, label: { zh: "30–34歲", en: "30–34 / 30–34 taong gulang", id: "30–34 tahun", vi: "30–34 tuổi", th: "30–34 ปี" } },
+        { value: 4, label: { zh: "35–39歲", en: "35–39 / 35–39 taong gulang", id: "35–39 tahun", vi: "35–39 tuổi", th: "35–39 ปี" } },
+        { value: 5, label: { zh: "40歲（含）以上", en: "40 or older / 40 taong gulang pataas", id: "40 tahun ke atas", vi: "Từ 40 tuổi trở lên", th: "40 ปีขึ้นไป" } } ] },
+
+      { id: "D03", type: "single", label: { zh: "請問您的婚姻狀態是？", en: "What is your marital status? / Ano ang iyong civil status?", id: "Apa status perkawinan Anda?", vi: "Tình trạng hôn nhân của bạn là gì?", th: "สถานภาพสมรสของคุณคืออะไร" }, options: [
+        { value: 1, label: { zh: "單身", en: "Single / Walang asawa", id: "Belum menikah", vi: "Độc thân", th: "โสด" } },
+        { value: 2, label: { zh: "已婚", en: "Married / May asawa", id: "Menikah", vi: "Đã kết hôn", th: "แต่งงานแล้ว" } },
+        { value: 3, label: { zh: "離婚", en: "Divorced / Hiwalay / Annulled", id: "Cerai", vi: "Đã ly hôn", th: "หย่าร้าง" } },
+        { value: 4, other: true, label: { zh: "其他", en: "Other / Iba pa", id: "Lainnya", vi: "Khác", th: "อื่นๆ" } } ] },
+
+      { id: "D04", type: "single", label: { zh: "請問您有小孩嗎？", en: "Do you have any children? / May anak ka ba?", id: "Apakah Anda punya anak?", vi: "Bạn có con không?", th: "คุณมีบุตรหรือไม่" }, options: [
+        { value: 1, label: { zh: "有", en: "Yes / Mayroon", id: "Ya", vi: "Có", th: "มี" } },
+        { value: 0, label: { zh: "沒有", en: "No / Wala", id: "Tidak", vi: "Không", th: "ไม่มี" } } ] },
+
+      { id: "D05", type: "single", label: { zh: "請問您的宗教信仰是？", en: "What is your religion? / Ano ang iyong relihiyon?", id: "Apa agama Anda?", vi: "Tôn giáo của bạn là gì?", th: "คุณนับถือศาสนาอะไร" }, options: [
+        { value: 1, label: { zh: "無宗教信仰", en: "No religion / Walang relihiyon", id: "Tidak beragama", vi: "Không theo tôn giáo nào", th: "ไม่นับถือศาสนา" } },
+        { value: 2, label: { zh: "天主教", en: "Catholic / Katoliko", id: "Katolik", vi: "Công giáo", th: "คาทอลิก" } },
+        { value: 3, label: { zh: "基督教", en: "Christian / Kristiyano", id: "Kristen", vi: "Tin Lành", th: "คริสต์" } },
+        { value: 4, label: { zh: "伊斯蘭教", en: "Muslim / Islam", id: "Islam", vi: "Hồi giáo", th: "อิสลาม" } },
+        { value: 5, label: { zh: "印度教", en: "Hindu", id: "Hindu", vi: "Ấn Độ giáo", th: "ฮินดู" } },
+        { value: 6, label: { zh: "佛教", en: "Buddhist / Budismo", id: "Buddha", vi: "Phật giáo", th: "พุทธ" } },
+        { value: 7, other: true, label: { zh: "其他", en: "Other / Iba pa", id: "Lainnya", vi: "Khác", th: "อื่นๆ" } } ] },
+
+      { id: "D06", type: "single", label: { zh: "請問您在臺灣從事什麼類型的工作？", en: "What type of work do you do in Taiwan? / Anong trabaho mo sa Taiwan?", id: "Apa pekerjaan Anda di Taiwan?", vi: "Bạn làm công việc gì tại Đài Loan?", th: "คุณทำงานอะไรในไต้หวัน" }, options: [
+        { value: 1, label: { zh: "廠工", en: "Factory worker / Manggagawa sa pabrika", id: "Buruh pabrik", vi: "Công nhân nhà máy", th: "คนงานโรงงาน" } },
+        { value: 2, label: { zh: "看護", en: "Caregiver / Tagapag-alaga", id: "Perawat (caregiver)", vi: "Khán hộ công", th: "ผู้อนุบาล" } },
+        { value: 3, label: { zh: "漁工", en: "Fisherman / Mangingisda", id: "ABK/Nelayan", vi: "Ngư dân", th: "ประมง" } },
+        { value: 4, label: { zh: "營造工", en: "Construction worker / Manggagawa sa konstruksyon", id: "Buruh konstruksi", vi: "Công nhân xây dựng", th: "คนงานก่อสร้าง" } },
+        { value: 5, label: { zh: "農業工", en: "Agricultural worker / Manggagawa sa agrikultura", id: "Buruh pertanian", vi: "Lao động nông nghiệp", th: "แรงงานเกษตร" } },
+        { value: 6, other: true, label: { zh: "其他", en: "Other / Iba pa", id: "Lainnya", vi: "Khác", th: "อื่นๆ" } } ] },
+
+      { id: "D07", type: "select", label: { zh: "請問您在臺灣哪裡工作？", en: "Where do you work in Taiwan? / Saan ka nagtatrabaho sa Taiwan?", id: "Di kota/kabupaten mana Anda bekerja di Taiwan?", vi: "Bạn làm việc ở thành phố/huyện nào tại Đài Loan?", th: "คุณทำงานอยู่ที่เมือง/เขตใดในไต้หวัน" }, options: [
+        { value: 1, label: { zh: "基隆", en: "Keelung", id: "Keelung", vi: "Cơ Long (Keelung)", th: "จีหลง (Keelung)" } },
+        { value: 2, label: { zh: "臺北", en: "Taipei", id: "Taipei", vi: "Đài Bắc (Taipei)", th: "ไทเป (Taipei)" } },
+        { value: 3, label: { zh: "新北", en: "New Taipei", id: "New Taipei", vi: "Tân Bắc (New Taipei)", th: "นิวไทเป (New Taipei)" } },
+        { value: 4, label: { zh: "桃園", en: "Taoyuan", id: "Taoyuan", vi: "Đào Viên (Taoyuan)", th: "เถาหยวน (Taoyuan)" } },
+        { value: 5, label: { zh: "新竹", en: "Hsinchu", id: "Hsinchu", vi: "Tân Trúc (Hsinchu)", th: "ซินจู๋ (Hsinchu)" } },
+        { value: 6, label: { zh: "苗栗", en: "Miaoli", id: "Miaoli", vi: "Miêu Lật (Miaoli)", th: "เหมียวลี่ (Miaoli)" } },
+        { value: 7, label: { zh: "臺中", en: "Taichung", id: "Taichung", vi: "Đài Trung (Taichung)", th: "ไถจง (Taichung)" } },
+        { value: 8, label: { zh: "彰化", en: "Changhua", id: "Changhua", vi: "Chương Hóa (Changhua)", th: "จางฮว่า (Changhua)" } },
+        { value: 9, label: { zh: "南投", en: "Nantou", id: "Nantou", vi: "Nam Đầu (Nantou)", th: "หนานโถว (Nantou)" } },
+        { value: 10, label: { zh: "雲林", en: "Yunlin", id: "Yunlin", vi: "Vân Lâm (Yunlin)", th: "หยุนหลิน (Yunlin)" } },
+        { value: 11, label: { zh: "嘉義", en: "Chiayi", id: "Chiayi", vi: "Gia Nghĩa (Chiayi)", th: "เจียอี้ (Chiayi)" } },
+        { value: 12, label: { zh: "臺南", en: "Tainan", id: "Tainan", vi: "Đài Nam (Tainan)", th: "ไถหนาน (Tainan)" } },
+        { value: 13, label: { zh: "高雄", en: "Kaohsiung", id: "Kaohsiung", vi: "Cao Hùng (Kaohsiung)", th: "เกาสง (Kaohsiung)" } },
+        { value: 14, label: { zh: "屏東", en: "Pingtung", id: "Pingtung", vi: "Bình Đông (Pingtung)", th: "ผิงตง (Pingtung)" } },
+        { value: 15, label: { zh: "宜蘭", en: "Yilan", id: "Yilan", vi: "Nghi Lan (Yilan)", th: "อี๋หลาน (Yilan)" } },
+        { value: 16, label: { zh: "花蓮", en: "Hualien", id: "Hualien", vi: "Hoa Liên (Hualien)", th: "ฮัวเหลียน (Hualien)" } },
+        { value: 17, label: { zh: "臺東", en: "Taitung", id: "Taitung", vi: "Đài Đông (Taitung)", th: "ไถตง (Taitung)" } },
+        { value: 18, label: { zh: "澎湖", en: "Penghu", id: "Penghu", vi: "Bành Hồ (Penghu)", th: "เผิงหู (Penghu)" } },
+        { value: 19, label: { zh: "金門", en: "Kinmen", id: "Kinmen", vi: "Kim Môn (Kinmen)", th: "จินเหมิน (Kinmen)" } },
+        { value: 20, label: { zh: "馬祖（連江）", en: "Matsu (Lienchiang)", id: "Matsu (Lienchiang)", vi: "Mã Tổ (Liên Giang / Matsu)", th: "หมาจู่ (เหลียนเจียง / Matsu)" } } ] },
+
+      { id: "D08", type: "single", label: { zh: "請問您平均每月實際領到的薪資（扣除各項費用後）是多少？", en: "What is your average monthly salary (the amount you actually receive after deductions)? / Magkano ang karaniwan mong buwanang sahod (ang halagang aktuwal mong natatanggap pagkatapos ng mga kaltas)?", id: "Berapa rata-rata gaji bulanan Anda (jumlah yang benar-benar Anda terima setelah potongan)?", vi: "Mức lương trung bình hàng tháng của bạn (số tiền thực nhận sau khi đã trừ các khoản) là bao nhiêu?", th: "เงินเดือนเฉลี่ยต่อเดือนของคุณ (จำนวนเงินที่ได้รับจริงหลังหักค่าใช้จ่ายต่างๆ) เท่าไร" }, options: [
+        { value: 1, label: { zh: "未滿新臺幣10,000元", en: "Less than NT$10,000", id: "Kurang dari NT$10.000", vi: "Dưới 10.000 Đài tệ", th: "ต่ำกว่า 10,000 เหรียญ" } },
+        { value: 2, label: { zh: "10,000–20,000元", en: "NT$10,000–20,000", id: "NT$10.000–20.000", vi: "10.000–20.000 Đài tệ", th: "10,000–20,000 เหรียญ" } },
+        { value: 3, label: { zh: "20,001–30,000元", en: "NT$20,001–30,000", id: "NT$20.001–30.000", vi: "20.001–30.000 Đài tệ", th: "20,001–30,000 เหรียญ" } },
+        { value: 4, label: { zh: "30,001–40,000元", en: "NT$30,001–40,000", id: "NT$30.001–40.000", vi: "30.001–40.000 Đài tệ", th: "30,001–40,000 เหรียญ" } },
+        { value: 5, label: { zh: "40,001–50,000元", en: "NT$40,001–50,000", id: "NT$40.001–50.000", vi: "40.001–50.000 Đài tệ", th: "40,001–50,000 เหรียญ" } },
+        { value: 6, label: { zh: "50,001–60,000元", en: "NT$50,001–60,000", id: "NT$50.001–60.000", vi: "50.001–60.000 Đài tệ", th: "50,001–60,000 เหรียญ" } },
+        { value: 7, label: { zh: "60,001–70,000元", en: "NT$60,001–70,000", id: "NT$60.001–70.000", vi: "60.001–70.000 Đài tệ", th: "60,001–70,000 เหรียญ" } },
+        { value: 8, label: { zh: "70,001元以上", en: "NT$70,001 or more", id: "NT$70.001 atau lebih", vi: "Từ 70.001 Đài tệ trở lên", th: "70,001 เหรียญขึ้นไป" } } ] },
+
+      { id: "D09", type: "single", label: { zh: "請問您來自哪個國家？", en: "Where are you from? / Taga-saan ka?", id: "Anda berasal dari negara mana?", vi: "Bạn đến từ nước nào?", th: "คุณมาจากประเทศอะไร" }, options: [
+        { value: 1, label: { zh: "印尼", en: "Indonesia", id: "Indonesia", vi: "Indonesia", th: "อินโดนีเซีย" } },
+        { value: 2, label: { zh: "泰國", en: "Thailand", id: "Thailand", vi: "Thái Lan", th: "ไทย" } },
+        { value: 3, label: { zh: "越南", en: "Vietnam", id: "Vietnam", vi: "Việt Nam", th: "เวียดนาม" } },
+        { value: 4, label: { zh: "菲律賓", en: "the Philippines", id: "Filipina", vi: "Philippines", th: "ฟิลิปปินส์" } },
+        { value: 5, other: true, label: { zh: "其他", en: "Other", id: "Lainnya", vi: "Khác", th: "อื่นๆ" } } ] },
+
+      { id: "D10", type: "single",
+        label: { zh: "請問您目前在臺灣的身分狀態是？", en: "What is your current status in Taiwan? / Ano ang kasalukuyan mong katayuan (status) dito sa Taiwan?", id: "Apa status Anda saat ini di Taiwan?", vi: "Tình trạng hiện tại của bạn tại Đài Loan là gì?", th: "สถานะปัจจุบันของคุณในไต้หวันคืออะไร" },
+        hint: { zh: "（本問卷採匿名填答，僅供學術研究使用）", en: "(This survey is anonymous and for academic research only. / Ang survey na ito ay anonymous at para lamang sa akademikong pananaliksik.)", id: "(Survei ini bersifat anonim dan hanya digunakan untuk penelitian akademis.)", vi: "(Khảo sát này là ẩn danh và chỉ dùng cho mục đích nghiên cứu học thuật.)", th: "(แบบสอบถามนี้ไม่ระบุตัวตน และใช้เพื่อการวิจัยทางวิชาการเท่านั้น)" },
+        options: [
+        { value: 1, label: { zh: "合法身分，目前有雇主", en: "Documented, currently working for an employer / Dokumentado, kasalukuyang may employer", id: "Berdokumen, saat ini bekerja pada majikan", vi: "Hợp pháp, hiện đang làm việc cho chủ", th: "ถูกกฎหมาย ปัจจุบันทำงานกับนายจ้าง" } },
+        { value: 2, label: { zh: "合法身分，正在轉換雇主中", en: "Documented, in the process of transferring to a new employer / Dokumentado, kasalukuyang lumilipat sa bagong employer", id: "Berdokumen, sedang proses pindah majikan", vi: "Hợp pháp, đang trong thời gian chuyển chủ", th: "ถูกกฎหมาย อยู่ระหว่างเปลี่ยนนายจ้าง" } },
+        { value: 3, label: { zh: "已離開原雇主，目前無合法身分", en: "Left my employer, currently undocumented / Umalis na sa dating employer, kasalukuyang walang dokumento", id: "Sudah meninggalkan majikan, saat ini tidak berdokumen", vi: "Đã rời chủ cũ, hiện không có giấy tờ hợp pháp", th: "ออกจากนายจ้างเดิมแล้ว ปัจจุบันไม่มีเอกสารถูกต้อง" } },
+        { value: 4, label: { zh: "不願回答", en: "Prefer not to answer / Mas gusto kong hindi sumagot", id: "Tidak ingin menjawab", vi: "Không muốn trả lời", th: "ไม่ประสงค์จะตอบ" } } ] }
     ]},
-    { id: "scale", title: { zh: "你的想法（量表範例）", en: "Your views (sample scale)" }, items: [
-      { id: "LAVS01", type: "scale", scale: "agree5", label: { zh: "[量表第 1 題：之後換成正式題目]", en: "[Scale item 1: replace with final item]" } },
-      { id: "LAVS02", type: "scale", scale: "agree5", label: { zh: "[量表第 2 題：之後換成正式題目]", en: "[Scale item 2: replace with final item]" } },
-      { id: "ATT1", type: "scale", scale: "agree5", label: { zh: "這一題請選「同意」。", en: "For this question, please choose \"Agree\"." } },
-      { id: "LAVS03", type: "scale", scale: "agree5", label: { zh: "[量表第 3 題：之後換成正式題目]", en: "[Scale item 3: replace with final item]" } }
-    ]},
-    { id: "vignette", title: { zh: "情境題（範例）", en: "Situations (sample)" }, items: [
-      { id: "V1_text", type: "info", label: { zh: "[情境 1：之後放入改寫自判決的情境文字]\n\n例如：你的同鄉朋友說……", en: "[Situation 1: replace with the final scenario text]\n\nFor example: a friend from your hometown says…" } },
-      { id: "V1", type: "scale", scale: "likely5", label: { zh: "如果是你，你有多可能答應？", en: "If this were you, how likely would you be to agree?" } }
-    ]},
-    { id: "end", title: { zh: "最後一題", en: "Last question" }, items: [
-      { id: "OPEN1", type: "text", optional: true, maxLength: 1000, label: { zh: "還有什麼想告訴我們的嗎？（可以不填）", en: "Is there anything else you want to tell us? (optional)" } }
-    ]}
+
   ]
 };
 
@@ -242,9 +418,36 @@ function visible(item) {
   if (!item.showIf) return true;
   return item.showIf.in.includes(S.answers[item.showIf.item]);
 }
+// 量表選項：有 anchors 的題目只標兩端（1 · 低端文字 … 5 · 高端文字），否則用共用量表
+// 英文版「English / Tagalog」分兩行顯示：英文在上，他加祿語在下（只在第一個「 / 」處分開）
+// 例外：題目下方的 Note／說明小字不分行，英文與他加祿語用「 / 」隔開、同樣大小
+function bi(str) {
+  if (S.lang !== "en" || typeof str !== "string" || !str.includes(" / ")) return str;
+  const i = str.indexOf(" / ");
+  return [el("span", { class: "bi-en", text: str.slice(0, i) }), el("span", { class: "bi-tl", lang: "tl", text: str.slice(i + 3) })];
+}
+// 說明文字裡用 **…** 標示粗體
+function rich(str) {
+  return String(str).split(/\*\*(.+?)\*\*/).map((part, i) => i % 2 ? el("strong", { text: part }) : part).filter(x => x !== "");
+}
+function scaleOpts(item) {
+  if (!item.anchors) return CONFIG.scales[item.scale];
+  const n = item.points || 5;
+  return Array.from({ length: n }, (_, i) => {
+    const v = i + 1;
+    const end = v === 1 ? item.anchors.low : v === n ? item.anchors.high : null;
+    return { value: v, label: end ? { en: v + " · " + (end.en || ""), ...Object.fromEntries(Object.entries(end).map(([k, x]) => [k, v + " · " + x])) } : String(v) };
+  });
+}
 function answered(item) {
   const v = S.answers[item.id];
   return v !== undefined && v !== null && v !== "";
+}
+// 已作答且（若選了「其他」）有填說明，才算完成
+function complete(item) {
+  if (!answered(item)) return false;
+  const chosen = (item.options || []).find(o => o.value === S.answers[item.id]);
+  return !(chosen && chosen.other && !(S.answers[item.id + "_other"] || "").trim());
 }
 function numError(item) {
   const v = S.answers[item.id];
@@ -261,16 +464,20 @@ function render() {
 }
 
 function renderLang() {
+  const htmlLang = { zh: "zh-Hant" };
   add(
-    el("div", { class: "eyebrow", text: "國立臺北大學 · National Taipei University" }),
-    el("h1", { text: "Survey for Foreign Workers in Taiwan" }),
-    el("p", { text: "在台外籍工作者問卷" }),
-    el("div", { class: "muted", text: "Choose your language · 請選擇語言" }),
-    CONFIG.languages.map(l => el("button", { class: "lang-btn", type: "button",
+    el("div", { class: "eyebrow", text: "National Taipei University · 國立臺北大學" }),
+    el("p", { class: "choose-lang" },
+      CONFIG.languages.filter(l => CONFIG.landing.choose[l.code]).map((l, i) => [
+        i ? " · " : null,
+        el("span", { class: "phrase", lang: htmlLang[l.code] || l.code, text: CONFIG.landing.choose[l.code] })])),
+    // 每個語言一塊：語言名稱 + 該語言的研究標題，點整塊進入
+    CONFIG.languages.map(l => el("button", { class: "lang-btn", type: "button", lang: htmlLang[l.code] || l.code,
       onclick: () => { S.lang = l.code; go("consent"); } },
-      el("span", {}, el("span", { class: "lang-name", text: l.name }), el("span", { class: "lang-sub", text: l.sub })),
-      el("span", { "aria-hidden": "true", text: "›" }))),
-    el("div", { class: "muted", text: "No name, ID or phone number is collected. 不會收集姓名、證件號碼或電話。" })
+      el("span", { class: "lang-text" },
+        el("span", { class: "lang-name", text: l.name }),
+        el("span", { class: "lang-title", text: CONFIG.consent.title[l.code] || "" })),
+      el("span", { class: "lang-arrow", "aria-hidden": "true", text: "›" })))
   );
 }
 
@@ -288,55 +495,130 @@ function renderConsent() {
   add(
     el("button", { class: "link-btn", type: "button", onclick: () => go("lang") }, "‹ " + ui("changeLang")),
     el("div", { class: "eyebrow", text: ui("university") }),
-    el("h1", { text: ui("consentTitle") }),
-    el("div", { class: "chips" }, el("span", { class: "chip", text: ui("minutes") }), el("span", { class: "chip", text: ui("anonymous") })),
-    CONFIG.consent.map(c => el("div", { class: "card" }, el("h2", { text: t(c.title) }),
-      el("p", { style: "white-space: pre-line", text: t(c.body) }))),
+    el("h1", { text: t(CONFIG.consent.title) }),
+    el("div", { class: "card letter" },
+      el("p", { text: t(CONFIG.consent.greeting) }),
+      CONFIG.consent.blocks.map(b => el("p", { text: t(b) })),
+      el("div", { class: "signoff" }, CONFIG.consent.footer.map(f => el("div", { text: t(f) })))),
     // 防機器人欄位：真人看不到
     el("div", { class: "hp", "aria-hidden": "true" },
       el("label", {}, "Website", el("input", { type: "text", tabindex: "-1", autocomplete: "off", oninput: e => { S.hp = e.target.value; } }))),
     box("age", ui("ageCheck")),
     box("agree", ui("agreeCheck")),
     startBtn,
-    el("button", { class: "link-btn", type: "button", style: "align-self: center", onclick: () => { store.del(KEY_DRAFT); go("declined"); } }, ui("decline"))
+    el("button", { class: "link-btn", type: "button", style: "align-self: center", onclick: () => { store.del(KEY_DRAFT); S.page = "declined"; render(); window.scrollTo(0, 0); } }, ui("decline"))
   );
 }
 
 function renderDeclined() {
-  add(el("h1", { text: ui("declinedTitle") }), el("p", { text: ui("declinedBody") }));
+  add(el("h1", { text: ui("declinedTitle") }), el("p", { text: ui("declinedBody") }),
+    el("button", { class: "btn btn-ghost", type: "button",
+      onclick: () => { S.consent = { age: false, agree: false }; store.del(KEY_DRAFT); S.page = "lang"; render(); window.scrollTo(0, 0); } },
+      ui("backToStart")));
 }
 
 function renderItem(item) {
-  const missing = S.showMissing && visible(item) && item.type !== "info" && !item.optional && !answered(item);
+  const missing = S.showMissing && visible(item) && item.type !== "info" && !item.optional && !complete(item);
   const card = el("div", { class: "card" + (missing ? " missing" : ""), id: "q-" + item.id });
   const set = v => {
     S.answers[item.id] = v; saveDraft();
-    if (dependedOn.has(item.id) || S.showMissing) { const y = window.scrollY; render(); window.scrollTo(0, y); }
+    const hasOther = (item.options || []).some(o => o.other);
+    if (dependedOn.has(item.id) || S.showMissing || hasOther) { const y = window.scrollY; render(); window.scrollTo(0, y); }
   };
+  const hint = item.hint ? el("div", { class: "hint", text: t(item.hint) }) : "";
+  // 選了「其他」時出現的說明輸入框
+  const otherBox = () => {
+    const chosen = (item.options || []).find(o => o.value === S.answers[item.id]);
+    if (!chosen || !chosen.other) return "";
+    const box = el("input", { type: "text", class: "other-in", maxlength: "200", "aria-label": t(chosen.label) + " – " + ui("otherPlaceholder"),
+      placeholder: ui("otherPlaceholder"), oninput: e => { S.answers[item.id + "_other"] = e.target.value; saveDraft(); } });
+    box.value = S.answers[item.id + "_other"] ?? "";
+    return box;
+  };
+  // 情境文字：顯示在題目上方的灰底框
+  if (item.context) card.append(el("div", { class: "vignette context" }, rich(t(item.context))));
   if (item.type === "info") {
-    card.append(el("div", { class: "vignette", text: t(item.label) }));
+    card.append(el("div", { class: "vignette" }, rich(t(item.label))));
+  } else if (item.type === "scale" && ["slider-h", "slider-v"].includes(item.layout || CONFIG.scaleLayout)) {
+    // 拉桿：一開始沒有預設答案（看不到拉桿頭），拖動或點一下才算作答
+    const opts = scaleOpts(item);
+    const cur = S.answers[item.id];
+    const vertical = (item.layout || CONFIG.scaleLayout) === "slider-v";
+    const label = el("div", { class: "slider-val", "aria-hidden": "true",
+      text: cur ? t(opts.find(o => o.value === cur).label) : "" });
+    const input = el("input", { id: "in-" + item.id, type: "range", min: opts[0].value, max: opts[opts.length - 1].value, step: 1,
+      value: cur ?? Math.round((opts[0].value + opts[opts.length - 1].value) / 2),
+      class: (vertical ? "slider-v" : "slider") + (cur ? "" : " untouched"),
+      "aria-valuetext": cur ? t(opts.find(o => o.value === cur).label) : "",
+      // 點在中間（數值沒變）時 input 事件不會觸發，所以 click 也要算作答
+      oninput: e => commit(e.target),
+      onclick: e => commit(e.target),
+      onchange: e => commit(e.target) });
+    function commit(target) {
+      const v = Number(target.value);
+      S.answers[item.id] = v; saveDraft();
+      target.classList.remove("untouched");
+      const txt = t(opts.find(o => o.value === v).label);
+      label.textContent = txt; target.setAttribute("aria-valuetext", txt);
+      if (S.showMissing) card.classList.remove("missing");
+    }
+    card.append(el("label", { class: "q", for: "in-" + item.id }, bi(t(item.label))), hint);
+    if (vertical) {
+      card.append(el("div", { class: "slider-v-wrap" }, input,
+        el("div", { class: "ticks-v", "aria-hidden": "true" }, opts.slice().reverse().map((o, i) =>
+          el("span", { style: "top:" + (i / (opts.length - 1) * 100) + "%", text: t(o.label) })))));
+    } else {
+      card.append(el("div", { class: "slider-wrap" }, input,
+        el("div", { class: "ticks", "aria-hidden": "true" }, opts.map((o, i) =>
+          el("span", { style: "left:" + (i / (opts.length - 1) * 100) + "%", text: String(o.value) }))),
+        el("div", { class: "ends", "aria-hidden": "true" },
+          el("span", {}, bi(item.anchors ? t(item.anchors.low) : t(opts[0].label))),
+          el("span", {}, bi(item.anchors ? t(item.anchors.high) : t(opts[opts.length - 1].label))))));
+    }
+    // 選好的答案不另外顯示在拉桿下方（只保留給螢幕閱讀器的 aria-valuetext）
   } else if (item.type === "single" || item.type === "scale") {
-    const opts = item.type === "scale" ? CONFIG.scales[item.scale] : item.options;
-    card.append(el("fieldset", {}, el("legend", { text: t(item.label) }),
+    const opts = item.type === "scale" ? scaleOpts(item) : item.options;
+    card.append(el("fieldset", {}, el("legend", {}, bi(t(item.label))), hint,
       opts.map(o => el("label", { class: "opt" },
         el("input", { type: "radio", name: item.id, value: String(o.value), checked: S.answers[item.id] === o.value,
           onchange: () => set(o.value) }),
-        el("span", { text: t(o.label) })))));
+        el("span", {}, bi(t(o.label))))), otherBox()));
+  } else if (item.type === "select") {
+    const sel = el("select", { id: "in-" + item.id, onchange: e => set(e.target.value === "" ? "" : Number(e.target.value)) },
+      el("option", { value: "", text: ui("choose") }),
+      item.options.map(o => el("option", { value: String(o.value), selected: S.answers[item.id] === o.value, text: t(o.label) })));
+    card.append(el("label", { class: "q", for: "in-" + item.id }, bi(t(item.label))), hint, sel, otherBox());
+  } else if (item.type === "money") {
+    // 金額：自動加千分位（依語言用 , 或 .），旁邊顯示貨幣單位
+    const cur = CONFIG.currency[S.lang] || CONFIG.currency.en;
+    const fmt = n => new Intl.NumberFormat(cur.locale, { maximumFractionDigits: 0 }).format(n);
+    const v0 = S.answers[item.id];
+    const inp = el("input", { id: "in-" + item.id, type: "text", inputmode: "numeric", autocomplete: "off", class: "money-in",
+      oninput: e => {
+        const digits = e.target.value.replace(/\D/g, "").replace(/^0+(?=\d)/, "").slice(0, 15);
+        S.answers[item.id] = digits === "" ? "" : Number(digits); saveDraft();
+        e.target.value = digits === "" ? "" : fmt(Number(digits));
+      } });
+    inp.value = (v0 === undefined || v0 === "") ? "" : fmt(v0);
+    card.append(el("label", { class: "q", for: "in-" + item.id }, bi(t(item.label))), hint,
+      el("div", { class: "num-row" }, inp, el("span", { class: "unit", text: cur.unit })));
   } else if (item.type === "number") {
     const err = el("div", { class: "err", text: numError(item) ? ui("numRange", { min: item.min, max: item.max }) : "" });
-    card.append(el("label", { class: "q", for: "in-" + item.id, text: t(item.label) }),
-      el("input", { id: "in-" + item.id, type: "number", inputmode: "numeric", min: item.min, max: item.max,
-        value: S.answers[item.id] ?? "",
-        oninput: e => {
-          const raw = e.target.value;
-          S.answers[item.id] = raw === "" ? "" : Number(raw); saveDraft();
-          err.textContent = numError(item) ? ui("numRange", { min: item.min, max: item.max }) : "";
-        } }), err);
+    card.append(el("label", { class: "q", for: "in-" + item.id }, bi(t(item.label))), hint,
+      el("div", { class: "num-row" },
+        el("input", { id: "in-" + item.id, type: "number", inputmode: "numeric", min: item.min, max: item.max,
+          value: S.answers[item.id] ?? "",
+          oninput: e => {
+            const raw = e.target.value;
+            S.answers[item.id] = raw === "" ? "" : Number(raw); saveDraft();
+            err.textContent = numError(item) ? ui("numRange", { min: item.min, max: item.max }) : "";
+          } }),
+        item.unit ? el("span", { class: "unit", text: t(item.unit) }) : null), err);
   } else if (item.type === "text") {
     const ta = el("textarea", { id: "in-" + item.id, maxlength: item.maxLength || 1000,
       oninput: e => { S.answers[item.id] = e.target.value; saveDraft(); } });
     ta.value = S.answers[item.id] ?? "";
-    card.append(el("label", { class: "q", for: "in-" + item.id, text: t(item.label) }), ta);
+    card.append(el("label", { class: "q", for: "in-" + item.id }, bi(t(item.label))), ta);
   }
   return card;
 }
@@ -350,7 +632,7 @@ function renderSection() {
     el("div", { class: "muted", text: ui("page", { n: S.sec + 1, total }) }),
     el("div", { class: "progress", role: "progressbar", "aria-valuemin": "0", "aria-valuemax": String(total), "aria-valuenow": String(S.sec + 1) },
       el("div", { style: "width:" + ((S.sec + 1) / total * 100) + "%" })),
-    el("h1", { text: t(sec.title) }),
+    el("h1", {}, bi(t(sec.title))),
     S.showMissing ? el("div", { class: "banner", role: "alert", text: ui("missingBanner") }) : null,
     items.map(renderItem),
     el("div", { class: "btn-row" },
@@ -363,7 +645,7 @@ function renderSection() {
 function next(items, last) {
   const bad = items.find(numError);
   if (bad) { document.getElementById("q-" + bad.id).scrollIntoView({ behavior: "smooth", block: "center" }); return; }
-  const missing = items.filter(i => i.type !== "info" && !i.optional && !answered(i));
+  const missing = items.filter(i => i.type !== "info" && !i.optional && !complete(i));
   if (missing.length && !S.warned[S.sec]) {
     S.warned[S.sec] = true; S.showMissing = true; saveDraft(); render();
     document.getElementById("q-" + missing[0].id).scrollIntoView({ behavior: "smooth", block: "center" });
@@ -389,6 +671,12 @@ function buildPayload() {
     if (!visible(item)) p[item.id] = CONFIG.notShownCode;
     else if (!answered(item)) p[item.id] = CONFIG.missingCode;
     else p[item.id] = S.answers[item.id];
+    if (item.type === "money") p[item.id + "_cur"] = (CONFIG.currency[S.lang] || CONFIG.currency.en).code;
+    // 「其他」的說明文字：有選「其他」才存內容，否則留空
+    if ((item.options || []).some(o => o.other)) {
+      const chosen = item.options.find(o => o.value === S.answers[item.id]);
+      p[item.id + "_other"] = visible(item) && chosen && chosen.other ? (S.answers[item.id + "_other"] || "").trim() : "";
+    }
   }
   return p;
 }
@@ -435,13 +723,20 @@ function renderThanks() {
   const status = el("div", { class: "muted", role: "status" });
   add(
     el("h1", { text: ui("thanksTitle") }), el("p", { text: ui("thanksBody") }),
+    // 請填答者分享：手機支援時直接開啟分享選單（LINE、Facebook…），否則複製連結
+    el("div", { class: "card share" },
+      el("p", { class: "share-ask" }, bi(ui("shareAsk"))),
+      el("button", { class: "btn btn-primary", type: "button", onclick: async () => {
+        const url = location.href.split("#")[0];
+        try {
+          if (navigator.share) { await navigator.share({ text: ui("shareAsk").split(" / ")[0], url }); return; }
+        } catch (e) { if (e && e.name === "AbortError") return; }
+        try { await navigator.clipboard.writeText(url); status.textContent = ui("copied"); } catch (e) {}
+      } }, bi(ui("share"))),
+      status),
     el("div", { class: "card" }, el("h2", { text: ui("hotlineTitle") }),
       el("div", { class: "hotline" }, el("b", { text: "165" }), el("p", { text: ui("hotline165") })),
-      el("div", { class: "hotline" }, el("b", { text: "1955" }), el("p", { text: ui("hotline1955") }))),
-    el("button", { class: "btn btn-ghost", type: "button", onclick: async () => {
-      try { await navigator.clipboard.writeText(location.href.split("#")[0]); status.textContent = ui("copied"); } catch (e) {}
-    } }, ui("share")),
-    status
+      el("div", { class: "hotline" }, el("b", { text: "1955" }), el("p", { text: ui("hotline1955") })))
   );
   if (!CONFIG.scriptUrl && S.lastPayload) {
     add(el("p", { class: "muted", text: ui("demoNote") }), el("pre", { text: JSON.stringify(S.lastPayload, null, 2) }));
@@ -453,7 +748,7 @@ function renderThanks() {
   const pending = store.get(KEY_PENDING);
   const draft = store.get(KEY_DRAFT);
   if (draft && CONFIG.languages.some(l => l.code === draft.lang)) S = { ...S, ...draft, showMissing: false };
-  if (S.page === "sending" || S.page === "failed" || S.page === "thanks") S.page = "lang";
+  if (["sending", "failed", "thanks", "declined"].includes(S.page)) S.page = "lang";
   if (pending && CONFIG.scriptUrl) {
     S.lang = pending.lang; S.lastPayload = pending;
     await retry();
