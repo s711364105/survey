@@ -123,7 +123,7 @@ const CONFIG = {
   // 部署 Google Apps Script 後，把網址貼在這裡。留空 = 示範模式（不會送出，只顯示資料）
   scriptUrl: "https://script.google.com/macros/s/AKfycbzf2E7Zlvf6HU-4jVyyj5reyw_6NWmnrqNTF4rw8QI0-bu3bADcm3CyxHqeqxJQ4zqaXQ/exec",
   surveyId: "mw-survey",
-  version: "v0.20-prototype",
+  version: "v0.24-prototype",
   scaleLayout: "slider-h", // 所有量表題的預設呈現方式：橫向拉桿
   // 金額題的貨幣：先依「語言」假設國籍（英文版假設為菲律賓）。試算表會另存「題號_cur」記錄用了哪種貨幣
   currency: {
@@ -269,24 +269,24 @@ const CONFIG = {
         { value: 1, label: { zh: "男", en: "Male / Lalaki", id: "Laki-laki", vi: "Nam", th: "ชาย" } },
         { value: 2, label: { zh: "女", en: "Female / Babae", id: "Perempuan", vi: "Nữ", th: "หญิง" } } ] },
 
-      { id: "D02", type: "number", min: 18, max: 80,
-        label: { zh: "請問您幾歲？（請填數字）", en: "How old are you? / Ilang taon ka na?", id: "Berapa usia Anda? (isi dengan angka)", vi: "Bạn bao nhiêu tuổi? (vui lòng điền số)", th: "คุณอายุเท่าไร (กรุณากรอกเป็นตัวเลข)" },
-        unit: { zh: "歲", en: "years old / taong gulang", id: "tahun", vi: "tuổi", th: "ปี" } },
-
-      // 年齡區間：兩種題目寫法（試用中，之後擇一保留）
+      // 年齡：區間題（2026-11-26 研究者決定保留 D02A，刪除 D02 數字題與 D02B 短標題；40–44、45–49、50+ 各語言由 Claude 草擬，待母語者確認）
       { id: "D02A", type: "single", label: { zh: "請問您幾歲？", en: "How old are you? / Ilang taon ka na?", id: "Berapa usia Anda?", vi: "Bạn bao nhiêu tuổi?", th: "คุณอายุเท่าไร" }, options: [
         { value: 1, label: { zh: "24歲（含）以下", en: "24 or younger / 24 taong gulang pababa", id: "24 tahun ke bawah", vi: "Từ 24 tuổi trở xuống", th: "ไม่เกิน 24 ปี" } },
         { value: 2, label: { zh: "25–29歲", en: "25–29 / 25–29 taong gulang", id: "25–29 tahun", vi: "25–29 tuổi", th: "25–29 ปี" } },
         { value: 3, label: { zh: "30–34歲", en: "30–34 / 30–34 taong gulang", id: "30–34 tahun", vi: "30–34 tuổi", th: "30–34 ปี" } },
         { value: 4, label: { zh: "35–39歲", en: "35–39 / 35–39 taong gulang", id: "35–39 tahun", vi: "35–39 tuổi", th: "35–39 ปี" } },
-        { value: 5, label: { zh: "40歲（含）以上", en: "40 or older / 40 taong gulang pataas", id: "40 tahun ke atas", vi: "Từ 40 tuổi trở lên", th: "40 ปีขึ้นไป" } } ] },
+        { value: 5, label: { zh: "40–44歲", en: "40–44 / 40–44 taong gulang", id: "40–44 tahun", vi: "40–44 tuổi", th: "40–44 ปี" } },
+        { value: 6, label: { zh: "45–49歲", en: "45–49 / 45–49 taong gulang", id: "45–49 tahun", vi: "45–49 tuổi", th: "45–49 ปี" } },
+        { value: 7, label: { zh: "50歲（含）以上", en: "50 or older / 50 taong gulang pataas", id: "50 tahun ke atas", vi: "Từ 50 tuổi trở lên", th: "50 ปีขึ้นไป" } } ] },
 
-      { id: "D02B", type: "single", label: { zh: "年齡", en: "Age / Edad", id: "Usia", vi: "Tuổi", th: "อายุ" }, options: [
-        { value: 1, label: { zh: "24歲（含）以下", en: "24 or younger / 24 taong gulang pababa", id: "24 tahun ke bawah", vi: "Từ 24 tuổi trở xuống", th: "ไม่เกิน 24 ปี" } },
-        { value: 2, label: { zh: "25–29歲", en: "25–29 / 25–29 taong gulang", id: "25–29 tahun", vi: "25–29 tuổi", th: "25–29 ปี" } },
-        { value: 3, label: { zh: "30–34歲", en: "30–34 / 30–34 taong gulang", id: "30–34 tahun", vi: "30–34 tuổi", th: "30–34 ปี" } },
-        { value: 4, label: { zh: "35–39歲", en: "35–39 / 35–39 taong gulang", id: "35–39 tahun", vi: "35–39 tuổi", th: "35–39 ปี" } },
-        { value: 5, label: { zh: "40歲（含）以上", en: "40 or older / 40 taong gulang pataas", id: "40 tahun ke atas", vi: "Từ 40 tuổi trở lên", th: "40 ปีขึ้นไป" } } ] },
+      // 教育程度（2026-11-27 研究者定稿選項；題幹 11/27 改為問句、不寫「完成」，由受訪者主觀認定：id / vi / th / zh 題幹由 Claude 草擬，待母語者確認）
+      // 選項 3、4 的英文和他加祿語本身含「 / 」，雙語版改用「 | 」分隔英文與他加祿語，純英文／純他加祿語版另外寫 eng、tl
+      { id: "D11", type: "single", label: { zh: "請問您的最高學歷是？", en: "What is your highest education level? / Ano ang iyong pinakamataas na antas ng edukasyon?", id: "Apa tingkat pendidikan tertinggi Anda?", vi: "Trình độ học vấn cao nhất của bạn là gì?", th: "ระดับการศึกษาสูงสุดของคุณคืออะไร" }, options: [
+        { value: 1, label: { zh: "國小（含）以下", en: "Elementary school or less / Elementarya o mas mababa pa", id: "SD ke bawah", vi: "Tiểu học trở xuống", th: "ประถมศึกษาหรือต่ำกว่า" } },
+        { value: 2, label: { zh: "國中", en: "Junior high school / Junior High School (o lumang 4-taong high school)", id: "SMP", vi: "Trung học cơ sở", th: "มัธยมศึกษาตอนต้น" } },
+        { value: 3, label: { zh: "高中／高職", en: "Senior high school / Senior vocational school | Senior High School / Bokasyonal (Tech-Voc)", eng: "Senior high school / Senior vocational school", tl: "Senior High School / Bokasyonal (Tech-Voc)", id: "SMA / SMK", vi: "Trung học phổ thông / Trung cấp nghề", th: "มัธยมศึกษาตอนปลาย / ปวช." } },
+        { value: 4, label: { zh: "大專（專科、大學）", en: "College / University | Kolehiyo / Unibersidad", eng: "College / University", tl: "Kolehiyo / Unibersidad", id: "Diploma / S1", vi: "Cao đẳng / Đại học", th: "อนุปริญญา (ปวส.) / ปริญญาตรี" } },
+        { value: 5, label: { zh: "研究所以上", en: "Master's degree or above / Masteral o mas mataas pa", id: "S2 ke atas", vi: "Thạc sĩ trở lên", th: "ปริญญาโทขึ้นไป" } } ] },
 
       { id: "D03", type: "single", label: { zh: "請問您的婚姻狀態是？", en: "What is your marital status? / Ano ang iyong civil status?", id: "Apa status perkawinan Anda?", vi: "Tình trạng hôn nhân của bạn là gì?", th: "สถานภาพสมรสของคุณคืออะไร" }, options: [
         { value: 1, label: { zh: "單身", en: "Single / Walang asawa", id: "Belum menikah", vi: "Độc thân", th: "โสด" } },
@@ -450,9 +450,12 @@ function visible(item) {
 // 英文版「English / Tagalog」分兩行顯示：英文在上，他加祿語在下（只在第一個「 / 」處分開）
 // 例外：題目下方的 Note／說明小字不分行，英文與他加祿語用「 / 」隔開、同樣大小
 function bi(str) {
-  if (S.lang !== "en" || typeof str !== "string" || !str.includes(" / ")) return str;
-  const i = str.indexOf(" / ");
-  return [el("span", { class: "bi-en", text: str.slice(0, i) }), el("span", { class: "bi-tl", lang: "tl", text: str.slice(i + 3) })];
+  if (S.lang !== "en" || typeof str !== "string") return str;
+  // 英文或他加祿語本身含「 / 」時，改用「 | 」分隔兩種語言（例如教育程度的選項 3、4）
+  const sep = str.includes(" | ") ? " | " : " / ";
+  if (!str.includes(sep)) return str;
+  const i = str.indexOf(sep);
+  return [el("span", { class: "bi-en", text: str.slice(0, i) }), el("span", { class: "bi-tl", lang: "tl", text: str.slice(i + sep.length) })];
 }
 // 說明文字裡用 **…** 標示粗體
 function rich(str) {
